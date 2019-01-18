@@ -9,6 +9,7 @@ export default class GuessForeheadScreen extends React.Component {
 
   render() {
     const idTheme = this.props.navigation.state.params.idTheme;
+    
     return (
       <ScrollView style={styles.container}>
         {/* Go ahead and delete ExpoLinksView and replace it with your

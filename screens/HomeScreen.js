@@ -32,7 +32,7 @@ export default class HomeScreen extends React.Component {
         <ScrollView contentContainerStyle={styles.container}>
 
             <View style={styles.header}>
-                <Text>Bienvenue sur le jeux</Text>
+                <Text>Bienvenue sur Guess My Forehead</Text>
             </View>
 
             <View style={styles.body}>
@@ -42,13 +42,13 @@ export default class HomeScreen extends React.Component {
                     {
                         dataAPI.map(
                             (value, index) => {
-                            return <View style={styles.helpContainer} key={index}>
-                            <TouchableOpacity onPress={() => {
-                                this._selectTheme(index);
-                            }} style={styles.helpLink}>
-                                <Text>{value.title}</Text>
-                            </TouchableOpacity>
-                            </View>
+                                return <View style={styles.helpContainer} key={index}>
+                                    <TouchableOpacity onPress={() => {
+                                        this._selectTheme(index);
+                                        }} style={styles.helpLink}>
+                                        <Text>{value.title}</Text>
+                                    </TouchableOpacity>
+                                </View>
                             }
                         ) 
                     }
@@ -61,7 +61,6 @@ export default class HomeScreen extends React.Component {
             </View>
         </ScrollView>
 
-
       </View>
     );
   }
@@ -70,30 +69,39 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'stretch'
-  },
-  header: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-    height: 70
-  },
-  body: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  footer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 70,
-  }
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'stretch'
+    },
+    header: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        height: 70
+    },
+    body: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    footer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 70,
+    }, 
+    helpContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    helpLink: {
+        backgroundColor: '#00FF00'
+    }
 });
