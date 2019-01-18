@@ -31,35 +31,34 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.container}>
 
-          <View>
-            {
-              dataAPI.map(
-                (value, index) => {
-                  return <View style={styles.helpContainer} key={index}>
-                  <TouchableOpacity onPress={() => {
-                    this._selectTheme(index);
-                  }} style={styles.helpLink}>
-                    <Text>{value.title}</Text>
-                  </TouchableOpacity>
-                </View>
-                }
-              ) 
-            }
-          </View>
             <View style={styles.header}>
                 <Text>Bienvenue sur le jeux</Text>
             </View>
+
             <View style={styles.body}>
                 <Text>Sélectionnez un thème pour commencer</Text>
+
+                <View>
+                    {
+                        dataAPI.map(
+                            (value, index) => {
+                            return <View style={styles.helpContainer} key={index}>
+                            <TouchableOpacity onPress={() => {
+                                this._selectTheme(index);
+                            }} style={styles.helpLink}>
+                                <Text>{value.title}</Text>
+                            </TouchableOpacity>
+                            </View>
+                            }
+                        ) 
+                    }
+                </View>
+
             </View>
+            
             <View style={styles.footer}>
                 <Text>Copyright ML + TD</Text>
             </View>
-          {/* <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View> */}
         </ScrollView>
 
 
