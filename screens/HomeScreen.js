@@ -19,8 +19,14 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  _selectTheme = (idTheme) => {
+    this.props.navigation.navigate('GuessForehead', {
+      idTheme: idTheme
+    });
+  }
+
   render() {
-    // console.log(dataAPI)
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -29,18 +35,17 @@ export default class HomeScreen extends React.Component {
             {
               dataAPI.map(
                 (value, index) => {
-                  return <Text key={index}>{value.title}</Text>
+                  return <View style={styles.helpContainer} key={index}>
+                  <TouchableOpacity onPress={() => {
+                    this._selectTheme(index);
+                  }} style={styles.helpLink}>
+                    <Text>{value.title}</Text>
+                  </TouchableOpacity>
+                </View>
                 }
               ) 
             }
           </View>
-         
-
-          {/* <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View> */}
         </ScrollView>
 
 
