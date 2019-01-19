@@ -1,69 +1,64 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { WebBrowser } from 'expo';
-
-import { MonoText } from '../components/StyledText';
 
 import dataAPI from '../assets/json/data.json';
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+    static navigationOptions = {
+        header: null,
+    };
 
-  _selectTheme = (idTheme) => {
-    this.props.navigation.navigate('GuessForehead', {
-      idTheme: idTheme
-    });
-  }
+    _selectTheme = (idTheme) => {
+        console.log('datas =>', dataAPI[idTheme])
+        this.props.navigation.navigate('GuessForehead', {
+            data: dataAPI[idTheme]
+        });
+    }
 
-  render() {
+    render() {
 
-    return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.container}>
-
-            <View style={styles.header}>
-                <Text>Bienvenue sur Guess My Forehead</Text>
-            </View>
-
-            <View style={styles.body}>
-                <Text>Sélectionnez un thème pour commencer</Text>
-
-                <View>
-                    {
-                        dataAPI.map(
-                            (value, index) => {
-                                return <View style={styles.helpContainer} key={index}>
-                                    <TouchableOpacity onPress={() => {
-                                        this._selectTheme(index);
-                                        }} style={styles.helpLink}>
-                                        <Text>{value.title}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                        ) 
-                    }
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text>Bienvenue sur Guess My Forehead</Text>
                 </View>
 
-            </View>
-            
-            <View style={styles.footer}>
-                <Text>Copyright ML + TD</Text>
-            </View>
-        </ScrollView>
+                <View style={styles.body}>
+                    <Text>Sélectionnez un thème pour commencer</Text>
 
-      </View>
-    );
-  }
+                    <ScrollView style={styles.helpContainer}>
+                        {
+                            dataAPI.map(
+                                (value, index) => {
+                                    return <TouchableOpacity
+                                        key={index}
+                                        onPress={() => {
+                                            this._selectTheme(index);
+                                        }}
+                                        style={styles.helpLink}>
+                                        <Text style={styles.themeText}>{value.title}</Text>
+                                    </TouchableOpacity>
+                                }
+                            )
+                        }
+                    </ScrollView>
+
+                </View>
+
+                <View style={styles.footer}>
+                    <Text>Copyright ML + TD</Text>
+                </View>
+            </View>
+        );
+    }
 
 
 }
@@ -94,14 +89,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: 70,
-    }, 
+    },
     helpContainer: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center'
+        width: '100%',
+        marginTop: 30,
+        paddingHorizontal: 30
     },
     helpLink: {
-        backgroundColor: '#00FF00'
+        backgroundColor: '#292929',
+        justifyContent: 'center',
+        marginBottom: 20,
+        height: 150,
+        borderRadius: 5
+    },
+    themeText: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: 'white',
+        letterSpacing: 1
     }
 });
