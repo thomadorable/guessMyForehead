@@ -9,7 +9,7 @@ import {
     View,
 } from 'react-native';
 
-import dataAPI from '../assets/json/data.json';
+import dataAPI from '../assets/data/guessMyForehead.json';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
