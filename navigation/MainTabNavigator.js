@@ -6,7 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import GuessForeheadScreen from '../screens/GuessForeheadScreen';
 import LinksScreen from '../screens/HangmanScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import SnakeScreen from '../screens/SnakeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -41,12 +41,12 @@ LinksStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const SnakeStack = createStackNavigator({
+  Snake: SnakeScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+SnakeStack.navigationOptions = {
+  tabBarLabel: 'Snake',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -58,5 +58,5 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
+  SnakeStack,
 });
