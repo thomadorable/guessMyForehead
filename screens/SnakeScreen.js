@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     },
     game: {
         flex: 1,
-        backgroundColor: 'green'
+        backgroundColor: '#292929'
     },
     snake: {
         position: 'absolute',

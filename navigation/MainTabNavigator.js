@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import GuessForeheadScreen from '../screens/GuessForeheadScreen';
 import LinksScreen from '../screens/HangmanScreen';
 import SnakeScreen from '../screens/SnakeScreen';
+import MemoryScreen from '../screens/MemoryScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -55,7 +56,22 @@ SnakeStack.navigationOptions = {
   ),
 };
 
+const MemoryStack = createStackNavigator({
+  Memory: MemoryScreen,
+});
+
+MemoryStack.navigationOptions = {
+  tabBarLabel: 'Memory',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    />
+  ),
+};
+
 export default createBottomTabNavigator({
+  MemoryStack,
   HomeStack,
   LinksStack,
   SnakeStack,
