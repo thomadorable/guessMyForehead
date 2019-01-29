@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, Animated, Easing } from 'react-native';
+import {shuffle} from '../constants/Utils';
+import Layout from '../constants/Layout'
 
-// TODO - animation return
+// TODO : 
 // TODO - design cards
 // TODO - timer
 // TODO - save best score
@@ -11,14 +13,26 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 // TODO - remove useless map
 // TODO - nb moves 
 // TODO - replay
+// TODO - animation return
 
 
 const cardWidth = 80;
 const nbColumns = 4;
+const space = 3;
 
 export default class MemoryScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+
     constructor(props) {
         super(props);
+
+        this.spinValue = new Animated.Value(0);
+        this.colorValue = new Animated.Value(0);
+
+        this.waitForAnim = 0;
+        this.animDuration = 400;
     }
 
     componentWillMount() {
@@ -36,7 +50,7 @@ export default class MemoryScreen extends React.Component {
             cards.push({color: values[i], status: 0});
         }
 
-        cards = this.shuffle(cards);
+        cards = shuffle(cards);
 
         this.setState({
             cards
@@ -45,17 +59,6 @@ export default class MemoryScreen extends React.Component {
         this.nbToWin = values.length;
         this.currents = [];
         this.nbMove = 0;
-    }
-
-    shuffle(a) {
-        let j, x, i;
-        for (i = a.length - 1; i > 0; i--) {
-            j = Math.floor(Math.random() * (i + 1));
-            x = a[i];
-            a[i] = a[j];
-            a[j] = x;
-        }
-        return a;
     }
 
     _pick = (card, index) => {
@@ -99,51 +102,86 @@ export default class MemoryScreen extends React.Component {
 
         this.setState({
             cards
-        })
+        });
+
+
+        if (this.currents.length > 0) {
+            this.spinValue = new Animated.Value(0);
+            this.colorValue = new Animated.Value(0);
+
+            Animated.stagger((this.animDuration / 2), [
+                Animated.timing(this.spinValue, {
+                    toValue: 1,
+                    duration: this.animDuration,
+                    easing: Easing.easeIn
+                }),
+                Animated.timing(this.colorValue, {
+                    toValue: 1,
+                    duration: 0,
+                    easing: Easing.easeIn
+                })
+            ]).start();
+
+            this.waitForAnim = Date.now();
+        }
     }
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[Layout.container, {alignItems: 'center'}]}>
                 <View style={styles.cards}>
                 {
                     this.state.cards.map((card, i) => {
                         if (card.status !== 0) {
-                            return (<View style={[styles.card, {backgroundColor: card.color}]} key={i}></View>)
+                            var color = card.color;
+                            var spin = '0deg';
+
+                            if (this.currents.length > 0) {
+                                if (card.index === this.currents[this.currents.length - 1].index) {
+                                    spin = this.spinValue.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: ['0deg', '180deg']
+                                    });
+                            
+                                    color = this.colorValue.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: ['#292929', card.color]
+                                    });
+                                }
+                            }
+
+                            return (<Animated.View style={[styles.card, {backgroundColor: color, transform: [{rotateY: spin}]}]} key={i}></Animated.View>)
                         } else {
-                            return (<TouchableOpacity style={styles.card} key={i} onPress={() => {
-                                    this._pick(card, i);
+                            return (<TouchableWithoutFeedback key={i} onPress={() => {
+                                    if ((Date.now() - this.waitForAnim) > this.animDuration) {
+                                        this._pick(card, i);
+                                    }
                                 }}>
-                             </TouchableOpacity>)
+                                <View  style={styles.card}></View>
+                             </TouchableWithoutFeedback>)
                         }
                     })
                 }
                 </View>
-                <Text style={{fontWeight: 'bold', marginTop: 20}}>{this.nbMove} coups</Text>
+                <Text style={{fontWeight: 'bold', marginTop: 20}}>{this.nbMove} coup{this.nbMove > 1 ? 's' : ''}</Text>
             </View>
         );
     }
 }
 
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#fff',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     cards: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        width: ((cardWidth + 1) * nbColumns)
+        width: ((cardWidth + space) * nbColumns)
     },
     card: {
         width: cardWidth,
         height: cardWidth,
-        marginBottom: 1,
-        backgroundColor: '#292929'
+        marginBottom: space,
+        backgroundColor: '#292929',
+        borderRadius: 5
     }
 });

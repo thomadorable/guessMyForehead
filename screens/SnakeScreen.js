@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import layout from '../constants/Layout'
+import Layout from '../constants/Layout'
 import { AsyncStorage } from "react-native"
+import Colors from '../constants/Colors';
 
-const centerX = Math.round(layout.window.width / 2);
+const centerX = Math.round(Layout.window.width / 2);
 
 // TODO : 
 // - design
@@ -22,6 +23,10 @@ const centerX = Math.round(layout.window.width / 2);
 // - stocker le record
 
 export default class SnakeScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+    
     constructor(props) {
         super(props);
         this.best = 0;
@@ -216,7 +221,7 @@ export default class SnakeScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: Colors.bg
     },
     game: {
         flex: 1,

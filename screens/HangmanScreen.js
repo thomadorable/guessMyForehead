@@ -2,14 +2,19 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import dataAPI from '../assets/data/hangman.json';
 
-import layout from '../constants/Layout'
+import Layout from '../constants/Layout'
 // 10 letters max per row - 2px margin
-const widthLetter = Math.floor(layout.window.width / 10) - 2;
+const widthLetter = Math.floor(Layout.window.width / 10) - 2;
 
 export default class LinksScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+
     constructor(props) {
         super(props);
         
+        // TODO : ne pas répéter ça
         this.word = dataAPI[Math.floor(Math.random() * dataAPI.length)].toUpperCase();
 
         this.letters = 'azertyuiopqsdfghjklmwxcvbn'.toUpperCase().split('');
@@ -127,7 +132,7 @@ export default class LinksScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={Layout.container}>
                 <View style={styles.word}>
                     {this._showWord()}
                 </View>
@@ -161,16 +166,11 @@ export default class LinksScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#fff',
-    },
     word: {
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 50,
-        marginTop: 30,
+        marginTop: 100,
     },
     lettersContainer: {
         flexDirection: 'row',

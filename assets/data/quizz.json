@@ -1,0 +1,59 @@
+[{
+        "question": "Quelle fonction vous permet de rendre du contenu React dans une page HTML ?",
+        "answers": [{
+                "value": "ReactDOM.render()",
+                "isWin": true
+            },
+            {
+                "value": "ReactDOM.start()"
+            }, {
+                "value": "React.render()"
+            }, {
+                "value": "React.mount()"
+            }
+        ]
+    }, {
+        "question": "React est :",
+        "answers": [{
+                "value": "Une librairie",
+                "isWin": true
+            },
+            {
+                "value": "Un framework"
+            }, {
+                "value": "Un CMS"
+            }, {
+                "value": "Un OVNI"
+            }
+        ]
+    },
+    {
+        "question": "Comment changer une propriété « name » à l’intérieur d’un composant de Classe : « React.Component » ? *",
+        "answers": [{
+                "value": "C’est impossible les propriétés d’un composant sont en lecture seule.",
+                "isWin": true
+            },
+            {
+                "value": "props[\"name​\"]​ = \"new name\""
+            }, {
+                "value": "this.props.name = \"new name\""
+            }
+        ]
+    },
+    {
+        "question": "Comment accéder à l’état d’un composant depuis l’intérieur d’une fonction membre ? *",
+        "answers": [{
+                "value": "this.state",
+                "isWin": true
+            },
+            {
+                "value": "this.prototype.stateValue"
+            }, {
+                "value": "this.getState()"
+            },
+            {
+                "value": "this.values"
+            }
+        ]
+    }
+]

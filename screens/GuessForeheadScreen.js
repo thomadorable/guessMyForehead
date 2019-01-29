@@ -1,7 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import Layout from '../constants/Layout'
+
+import Back from '../components/Back'
 
 export default class GuessForeheadScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+
     constructor(props) {
         super(props);
         
@@ -15,10 +22,6 @@ export default class GuessForeheadScreen extends React.Component {
         };
     }
 
-    static navigationOptions = ({navigation}) => ({
-        title: navigation.state.params.data.title,
-    });
-
     componentWillMount() {
         this.selectValue();
 
@@ -31,6 +34,10 @@ export default class GuessForeheadScreen extends React.Component {
                 });
             }
         }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     selectValue = () => {
@@ -53,7 +60,9 @@ export default class GuessForeheadScreen extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <View style={Layout.container}>
+                <Back navigation={this.props.navigation} />
+
                 <View style={styles.guessContainer}>
                     <Text style={styles.guess}>{this.state.value}</Text>
                         <Text style={styles.timer}>{this.state.timer}s | {this.state.pts}</Text>
@@ -86,12 +95,6 @@ export default class GuessForeheadScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#fff',
-        flexDirection: 'column'
-    },
     guessContainer: {
         flex: 1,
         justifyContent: 'center',

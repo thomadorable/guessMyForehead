@@ -1,20 +1,41 @@
 import React from 'react';
-import {
-    Image,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
+
+import Layout from '../constants/Layout'
+
 
 import dataAPI from '../assets/data/guessMyForehead.json';
+var allValues = [];
+for (let i = 0, l = dataAPI.length; i < l; i++) {
+    const data = dataAPI[i];
+
+    allValues = allValues.concat(data.values);
+}
+
+dataAPI.unshift({
+    "title": "Random",
+    "values": allValues
+});
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
+
+    constructor(props) {
+        super(props);
+
+        this.images = [
+            require('../assets/images/forehead/random.jpeg'),
+            require('../assets/images/forehead/stars.jpeg'),
+            require('../assets/images/forehead/90s.jpeg'),
+            require('../assets/images/forehead/music.jpeg'),
+            require('../assets/images/forehead/animals.jpeg'),
+            require('../assets/images/forehead/blockbuster.jpeg'),
+            require('../assets/images/forehead/food.jpeg'),
+            require('../assets/images/forehead/stars.jpeg')
+        ]
+    }
 
     _selectTheme = (idTheme) => {
         console.log('datas =>', dataAPI[idTheme])
@@ -26,7 +47,7 @@ export default class HomeScreen extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <View style={Layout.container}>
                 <View style={styles.header}>
                     <Text>Bienvenue sur Guess My Forehead</Text>
                 </View>
@@ -43,18 +64,20 @@ export default class HomeScreen extends React.Component {
                                         onPress={() => {
                                             this._selectTheme(index);
                                         }}
-                                        style={styles.helpLink}>
+                                    >
+                                        <ImageBackground 
+                                            imageStyle={{ borderRadius: 5, opacity: 0.7 }}
+                                            style={styles.helpLink} 
+                                            source={this.images[index]}
+                                        >
                                         <Text style={styles.themeText}>{value.title}</Text>
+                                         </ImageBackground>
                                     </TouchableOpacity>
                                 }
                             )
                         }
                     </ScrollView>
 
-                </View>
-
-                <View style={styles.footer}>
-                    <Text>Copyright ML + TD</Text>
                 </View>
             </View>
         );
@@ -64,13 +87,6 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'stretch'
-    },
     header: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -105,8 +121,10 @@ const styles = StyleSheet.create({
     },
     themeText: {
         textAlign: 'center',
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         color: 'white',
-        letterSpacing: 1
+        letterSpacing: 5,
+        fontSize: 20,
+        textTransform: 'uppercase'
     }
 });
