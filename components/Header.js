@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import color from '../constants/Colors'
+import Colors from '../constants/Colors'
 import { AsyncStorage } from "react-native"
 import { LinearGradient } from 'expo';
 
@@ -11,7 +11,7 @@ export default class CustomHeader extends React.Component {
             if (user) {
                 const json = JSON.parse(user);
 
-                if (json.image) {
+                if (json && this.state.image !== json.image) {
                     this.setState({
                         image: json.image
                     })
@@ -30,7 +30,7 @@ export default class CustomHeader extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentWillUpdate() {
         this._getUser();
     }
 
@@ -39,7 +39,7 @@ export default class CustomHeader extends React.Component {
             const imageUri = (this.state.image.length > 0) ? {uri: this.state.image} : require('../assets/images/avatar.png');
             return (
                 <TouchableOpacity style={styles.options} onPress={() => {
-                    this.props.navigation.navigate("NotifSettings")
+                    this.props.navigation.navigate("Settings")
                 }}>
                     <Image source={imageUri} style={{width: 40, height: 40, backgroundColor: 'black', borderRadius: 20}}/>
                 </TouchableOpacity>
@@ -48,14 +48,14 @@ export default class CustomHeader extends React.Component {
     }
 
     render() {
-
-        
         return (
             <LinearGradient
-                colors={['#4c669f', '#3b5998', '#192f6a']}
+                colors={[Colors.blue, Colors.green]}
+                start={[0, 0]}
+                end={[1, 0]}
                 style={styles.container}
             >
-                <Text style={styles.title}>Guess My GAME</Text>
+                <Text style={styles.title}>Guess My Game</Text>
                 {
                     this._showOptions()
                 }
@@ -67,13 +67,11 @@ export default class CustomHeader extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 50,
-        paddingBottom: 20,
-        backgroundColor: color.blue,
-        flexDirection: 'column'
+        paddingTop: 60,
+        paddingBottom: 15,
+        flexDirection: 'column',
     },
     title: {
-        textTransform: 'uppercase',
         fontSize: 18,
         textAlign: 'center',
         color: 'white',
@@ -82,6 +80,6 @@ const styles = StyleSheet.create({
     options: {
         position: 'absolute',
         right: 20,
-        top: 30
+        bottom: 15
     }
 });

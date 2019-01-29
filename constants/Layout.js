@@ -22,9 +22,8 @@ export default {
     },
     container: {
         flex: 1,
-        paddingTop: 20,
         backgroundColor: Colors.grey,
         flexDirection: 'column',
-        justifyContent: 'center',
-    },
+        // justifyContent: 'center',
+    }
 };

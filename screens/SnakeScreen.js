@@ -221,7 +221,7 @@ export default class SnakeScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.bg
+        backgroundColor: Colors.grey
     },
     game: {
         flex: 1,

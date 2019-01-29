@@ -1,9 +1,15 @@
-const tintColor = '#2c63b7';
+const blue = '#3a75b1';
+const green = '#4cb288';
+const tintColor = blue;
+const darkgrey = '#ccc';
 
 export default {
   tintColor,
-  tabIconDefault: '#ccc',
+  tabIconDefault: darkgrey,
   tabIconSelected: tintColor,
-  blue: tintColor,
-  grey: '#fafafa'
+  blue: blue,
+  green: green,
+  grey: '#fafafa',
+  darkgrey: darkgrey,
+  black: '#292929'
 };

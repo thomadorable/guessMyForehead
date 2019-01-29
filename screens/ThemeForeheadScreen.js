@@ -26,14 +26,14 @@ export default class HomeScreen extends React.Component {
         super(props);
 
         this.images = [
-            require('../assets/images/forehead/random.jpeg'),
-            require('../assets/images/forehead/stars.jpeg'),
-            require('../assets/images/forehead/90s.jpeg'),
-            require('../assets/images/forehead/music.jpeg'),
-            require('../assets/images/forehead/animals.jpeg'),
-            require('../assets/images/forehead/blockbuster.jpeg'),
-            require('../assets/images/forehead/food.jpeg'),
-            require('../assets/images/forehead/stars.jpeg')
+            require('../assets/images/forehead/random.jpg'),
+            require('../assets/images/forehead/stars.jpg'),
+            require('../assets/images/forehead/90s.jpg'),
+            require('../assets/images/forehead/music.jpg'),
+            require('../assets/images/forehead/animals.jpg'),
+            require('../assets/images/forehead/blockbuster.jpg'),
+            require('../assets/images/forehead/food.jpg'),
+            require('../assets/images/forehead/stars.jpg')
         ]
     }
 

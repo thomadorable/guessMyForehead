@@ -32,7 +32,6 @@ export default class OptionsScreen extends React.Component {
         try {
           const user = await AsyncStorage.getItem('@GuessMyForehead:user');
             if (user) {
-                console.log('get user !!', user);
                 this.setState({
                     user: JSON.parse(user)
                 })
@@ -49,8 +48,6 @@ export default class OptionsScreen extends React.Component {
             base64: true,
             quality: 0
         });
-    
-        console.log(result);
     
         if (!result.cancelled) {
             this._updateImage('data:image/png;base64,' + result.base64);
@@ -79,7 +76,10 @@ export default class OptionsScreen extends React.Component {
         const imageUri = (this.state.user.image && this.state.user.image.length > 0) ? {uri: this.state.user.image} : require('../assets/images/avatar.png');
         return (
             <View style={[Layout.container, {justifyContent: 'flex-start', paddingTop: 0}]}>
-                <Back navigation={this.props.navigation} action={this._setUser} />
+                <Back navigation={this.props.navigation} action={() => {
+                    this._setUser();
+                    this.props.navigation.pop();
+                }} />
 
                 <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                     <View style={{width: 250}}>

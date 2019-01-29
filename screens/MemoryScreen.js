@@ -3,18 +3,18 @@ import { View, StyleSheet, Text, TouchableWithoutFeedback, Animated, Easing } fr
 import {shuffle} from '../constants/Utils';
 import Layout from '../constants/Layout'
 
+import LaunchGame from '../components/LaunchGame'
+
 // TODO : 
 // TODO - design cards
 // TODO - timer
 // TODO - save best score
-
 
 // OK :
 // TODO - remove useless map
 // TODO - nb moves 
 // TODO - replay
 // TODO - animation return
-
 
 const cardWidth = 80;
 const nbColumns = 4;
@@ -33,10 +33,10 @@ export default class MemoryScreen extends React.Component {
 
         this.waitForAnim = 0;
         this.animDuration = 400;
-    }
 
-    componentWillMount() {
-        this._initGame();
+        this.state = {
+            isPlaying: false
+        }
     }
 
     _initGame = () => {
@@ -53,7 +53,8 @@ export default class MemoryScreen extends React.Component {
         cards = shuffle(cards);
 
         this.setState({
-            cards
+            cards,
+            isPlaying: true
         });
 
         this.nbToWin = values.length;
@@ -75,8 +76,9 @@ export default class MemoryScreen extends React.Component {
                 this.nbToWin--;
 
                 if (this.nbToWin <= 0) {
-                    alert('Gagné en ' + this.nbMove + ' coups !');
-                    this._initGame();
+                    this.setState({
+                        isPlaying: false,
+                    });
                     return;
                 }
                 this.currents = [];
@@ -127,7 +129,7 @@ export default class MemoryScreen extends React.Component {
     }
 
     render() {
-        return (
+        return (this.state.isPlaying) ? (
             <View style={[Layout.container, {alignItems: 'center'}]}>
                 <View style={styles.cards}>
                 {
@@ -165,7 +167,12 @@ export default class MemoryScreen extends React.Component {
                 </View>
                 <Text style={{fontWeight: 'bold', marginTop: 20}}>{this.nbMove} coup{this.nbMove > 1 ? 's' : ''}</Text>
             </View>
-        );
+        ) : <LaunchGame 
+                title="MEMORY"
+                action={this._initGame}
+                score={this.state.score}
+                rules="Retourne les cartes dans le bon ordre pour former des paires. Tu connais le principe ? Bonne chance !"
+            />
     }
 }
 

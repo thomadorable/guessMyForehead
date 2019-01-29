@@ -1,36 +1,80 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-// import { AsyncStorage } from "react-native"
+import { View, StyleSheet, Text, TouchableOpacity, AsyncStorage } from 'react-native';
 import dataAPI from '../assets/data/quizz.json';
 import {shuffle} from '../constants/Utils';
 import Layout from '../constants/Layout'
+import Back from '../components/Back'
 
+import LaunchGame from '../components/LaunchGame'
 
-// TODO
-// - relancer game
-
-export default class SnakeScreen extends React.Component {
+export default class QuizzScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
     
     constructor(props) {
         super(props);
+        this.state = {};
 
-        // Get 10 random questions from API
-        // Todo ne pas répéter ça
-        this.questions = shuffle(dataAPI).splice(0, 10);
-
-
-        this.state = {
-            question: null,
-        };
-
-        this.pts = 0;
+        this.nbQuestions = 10;
     }
 
     componentWillMount() {
+        this._getScore('quizz', (score) => {
+            this.setState({
+                score
+            });
+        });
+    }
+
+    _getScore = async (key, callback) => {
+        try {
+            let score = await AsyncStorage.getItem('@GuessMyForehead:' + key);
+            if (!score) {
+                // INIT SCORE OBJECT
+                score = {
+                    games : {
+                        ended: 0,
+                        canceled: 0
+                    }, 
+                    scores: {
+                        total: 0,
+                        last: 0,
+                        best: 0
+                    }
+                }
+                this._setScore(key, score);
+            } else {
+                score = JSON.parse(score);
+            }
+
+            callback(score);
+        } catch (error) {
+            // Error getting data
+        }
+    }
+
+    _setScore = async (key, score) => {
+        try {
+            await AsyncStorage.setItem('@GuessMyForehead:' + key, JSON.stringify(score));
+        } catch (error) {
+            // Error saving data
+        }
+    }
+
+    _initGame = () => {
+        // Use slice to duplicate the data API array
+        let allQuestions = shuffle(dataAPI.slice(0));
+
+        // Get 10 random questions from API
+        this.questions = allQuestions.splice(0, this.nbQuestions);
+
+        this.pts = 0;
         this._getQuestion();
+
+        this.setState({
+            isPlaying: true
+        })
     }
 
     _getQuestion = () => {
@@ -42,10 +86,7 @@ export default class SnakeScreen extends React.Component {
                 question
             });
         } else {
-            alert('Terminé avec ' + this.pts + ' points');
-            // this.questions = shuffle(dataAPI).splice(0, 10);
-            // this.pts = 0;
-            // this._getQuestion();
+            this._winGame();
         }
     }
 
@@ -64,15 +105,52 @@ export default class SnakeScreen extends React.Component {
         </TouchableOpacity>)
     }
 
+    _winGame = () => {
+        let score = this.state.score;
+        score.games.ended++;
+
+        score.scores.total += this.pts;
+        score.scores.last = this.pts;
+
+        if (this.pts > score.scores.best) {
+            score.scores.best = this.pts;
+        }
+
+        this._setScore('quizz', score);
+        this.setState({
+            score
+        });
+
+        this.setState({
+            isPlaying: false,
+        });
+    }
+
+    _backGame = () => {
+        let score = this.state.score;
+        score.games.canceled++;
+
+        this._setScore('quizz', score);
+        this.setState({
+            score
+        });
+
+        this.setState({
+            isPlaying: false
+        })
+    }
+
     render() {
-        return (
+        return (this.state.isPlaying) ? (
             <View style={Layout.container}>
+                <Back navigation={this.props.navigation} action={this._backGame} />
                 <View style={styles.guessContainer}>
                     <Text style={styles.guess}>
                         {this.state.question.question}
                     </Text>
 
                     <Text style={styles.timer}>{this.pts} pts</Text>
+                    <Text style={styles.timer}>{this.nbQuestions - this.questions.length} / {this.nbQuestions}</Text>
                 </View>
 
                 <View style={styles.btnContainer}>
@@ -84,7 +162,12 @@ export default class SnakeScreen extends React.Component {
                     {this._showButton(3)}
                 </View>
             </View>
-        )
+        ) : <LaunchGame 
+                title="QUIZZ"
+                action={this._initGame}
+                score={this.state.score}
+                rules="Réponds simplement aux questions dans ce quizz sur le thème du react native ! Tu vas pouvoir choisir la réponse parmis plusieurs propositions. Bonne chance !"
+            />
     }
 }
 

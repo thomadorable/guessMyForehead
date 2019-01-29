@@ -74,7 +74,7 @@ MemoryStack.navigationOptions = {
 const QuizzStack = createStackNavigator({
     Quizz: {
         screen: QuizzScreen,
-    },
+    }
 });
 
 QuizzStack.navigationOptions = {
@@ -88,8 +88,8 @@ QuizzStack.navigationOptions = {
 };
 
 var TabNav = createBottomTabNavigator({
-    QuizzStack,
     MemoryStack,
+    QuizzStack,
     HomeStack,
     HangmanStack,
     SnakeStack,
@@ -107,12 +107,12 @@ const StacksOverTabs = createStackNavigator({
         header: props => <Header {...props} />,
     }
     },
-    NotifSettings: {
+    Settings: {
         screen: OptionsScreen,
-      navigationOptions: {
-        title: 'Notifications',
-        header: props => <Header {...props} hideOptions={true} />,
-      },
+        navigationOptions: {
+            title: 'Notifications',
+            header: props => <Header {...props} hideOptions={true} />,
+        },
     },
   });
   

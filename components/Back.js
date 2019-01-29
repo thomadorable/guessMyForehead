@@ -5,8 +5,11 @@ export default class Back extends React.Component {
     render() {
         return (
             <TouchableOpacity style={styles.backContainer} onPress={() => {
-                this.props.action && this.props.action();
-                this.props.navigation.pop()
+                if (this.props.action) {
+                    this.props.action();
+                } else {
+                    this.props.navigation.pop()
+                }
             }}>
                 <Text style={styles.back}>Retour</Text>
             </TouchableOpacity>

@@ -58,7 +58,6 @@ export default class GuessForeheadScreen extends React.Component {
     }
 
     render() {
-
         return (
             <View style={Layout.container}>
                 <Back navigation={this.props.navigation} />
