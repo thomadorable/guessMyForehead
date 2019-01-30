@@ -14,13 +14,6 @@ const centerX = Math.round(Layout.window.width / 2);
 // - ne pas pouvoir faire demi-tour
 // - ne pas pouvoir sortir de l'écran
 
-// OK :
-// - détecter collision avec snake 
-// - utiliser les setNativeProps
-// - pouvoir rejouer
-// - afficher les points 
-// - centrer le snake à l'init
-// - stocker le record
 
 export default class SnakeScreen extends React.Component {
     static navigationOptions = {

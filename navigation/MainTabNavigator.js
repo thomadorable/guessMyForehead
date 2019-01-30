@@ -34,7 +34,7 @@ const HangmanStack = createStackNavigator({
 });
 
 HangmanStack.navigationOptions = {
-    tabBarLabel: 'Hangman',
+    tabBarLabel: 'Pendu',
     tabBarIcon: ({ focused }) => (
         <TabBarIcon
             focused={focused}
@@ -88,14 +88,14 @@ QuizzStack.navigationOptions = {
 };
 
 var TabNav = createBottomTabNavigator({
+    HangmanStack,
     MemoryStack,
     QuizzStack,
     HomeStack,
-    HangmanStack,
     SnakeStack,
 }, {
     tabBarOptions: {
-        activeTintColor: Colors.blue
+        activeTintColor: Colors.tabIconSelected
     }
 });
 

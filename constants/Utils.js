@@ -1,3 +1,5 @@
+import { getScore, setScore } from '../utils/data'
+
 // Shuffle an array
 export function shuffle (a) {
     let j, x, i;
@@ -8,4 +10,33 @@ export function shuffle (a) {
         a[j] = x;
     }
     return a;
+}
+
+export function backGame (KEY) {
+    let score = this.state.score;
+        score.games.canceled++;
+
+    setScore(KEY, score);
+    this.setState({
+        score: score,
+        isPlaying: false
+    });
+}
+
+export function winGame (KEY) {
+    let score = this.state.score;
+    score.games.ended++;
+
+    score.scores.total += this.pts;
+    score.scores.last = this.pts;
+
+    if (this.pts > score.scores.best) {
+        score.scores.best = this.pts;
+    }
+
+    setScore(KEY, score);
+    this.setState({
+        score,
+        isPlaying: false,
+    });
 }

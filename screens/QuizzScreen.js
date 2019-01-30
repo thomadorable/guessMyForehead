@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import dataAPI from '../assets/data/quizz.json';
-import {shuffle} from '../constants/Utils';
+import { shuffle, backGame, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
 import Back from '../components/Back'
+import { getScore, setScore } from '../utils/data'
 
 import LaunchGame from '../components/LaunchGame'
+
+const KEY = 'quizz';
 
 export default class QuizzScreen extends React.Component {
     static navigationOptions = {
@@ -20,46 +23,11 @@ export default class QuizzScreen extends React.Component {
     }
 
     componentWillMount() {
-        this._getScore('quizz', (score) => {
+        getScore(KEY, (score) => {
             this.setState({
                 score
             });
         });
-    }
-
-    _getScore = async (key, callback) => {
-        try {
-            let score = await AsyncStorage.getItem('@GuessMyForehead:' + key);
-            if (!score) {
-                // INIT SCORE OBJECT
-                score = {
-                    games : {
-                        ended: 0,
-                        canceled: 0
-                    }, 
-                    scores: {
-                        total: 0,
-                        last: 0,
-                        best: 0
-                    }
-                }
-                this._setScore(key, score);
-            } else {
-                score = JSON.parse(score);
-            }
-
-            callback(score);
-        } catch (error) {
-            // Error getting data
-        }
-    }
-
-    _setScore = async (key, score) => {
-        try {
-            await AsyncStorage.setItem('@GuessMyForehead:' + key, JSON.stringify(score));
-        } catch (error) {
-            // Error saving data
-        }
     }
 
     _initGame = () => {
@@ -86,7 +54,7 @@ export default class QuizzScreen extends React.Component {
                 question
             });
         } else {
-            this._winGame();
+            winGame.bind(this)(KEY);
         }
     }
 
@@ -105,45 +73,12 @@ export default class QuizzScreen extends React.Component {
         </TouchableOpacity>)
     }
 
-    _winGame = () => {
-        let score = this.state.score;
-        score.games.ended++;
-
-        score.scores.total += this.pts;
-        score.scores.last = this.pts;
-
-        if (this.pts > score.scores.best) {
-            score.scores.best = this.pts;
-        }
-
-        this._setScore('quizz', score);
-        this.setState({
-            score
-        });
-
-        this.setState({
-            isPlaying: false,
-        });
-    }
-
-    _backGame = () => {
-        let score = this.state.score;
-        score.games.canceled++;
-
-        this._setScore('quizz', score);
-        this.setState({
-            score
-        });
-
-        this.setState({
-            isPlaying: false
-        })
-    }
-
     render() {
         return (this.state.isPlaying) ? (
             <View style={Layout.container}>
-                <Back navigation={this.props.navigation} action={this._backGame} />
+                <Back navigation={this.props.navigation} action={() => {
+                    backGame.bind(this)(KEY);
+                }} />
                 <View style={styles.guessContainer}>
                     <Text style={styles.guess}>
                         {this.state.question.question}

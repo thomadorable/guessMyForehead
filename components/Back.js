@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         padding: 20,
         backgroundColor: 'white',
+        width: '100%'
     },
     back: {
         color: '#292929',

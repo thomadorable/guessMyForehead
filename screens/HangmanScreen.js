@@ -1,12 +1,19 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import dataAPI from '../assets/data/hangman.json';
-
+import { backGame, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
+import { getScore } from '../utils/data'
+
+import Back from '../components/Back'
+import LaunchGame from '../components/LaunchGame'
+
+const KEY = 'hangman';
+
 // 10 letters max per row - 2px margin
 const widthLetter = Math.floor(Layout.window.width / 10) - 2;
 
-export default class LinksScreen extends React.Component {
+export default class HangmanScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
@@ -14,16 +21,7 @@ export default class LinksScreen extends React.Component {
     constructor(props) {
         super(props);
         
-        // TODO : ne pas répéter ça
-        this.word = dataAPI[Math.floor(Math.random() * dataAPI.length)].toUpperCase();
-
         this.letters = 'azertyuiopqsdfghjklmwxcvbn'.toUpperCase().split('');
-
-        this.state = {
-            letters: [],
-            nbTry: 0,
-            tryLetters: []
-        }
 
         this.images = [
             require('../assets/images/hangman/1.png'),
@@ -35,7 +33,30 @@ export default class LinksScreen extends React.Component {
             require('../assets/images/hangman/7.png'),
             require('../assets/images/hangman/8.png'),
             require('../assets/images/hangman/9.png')
-        ]
+        ];
+
+        this.state = {
+            isPlaying: false
+        }
+    }
+
+    componentWillMount() {
+        getScore(KEY, (score) => {
+            this.setState({
+                score,
+            });
+        });
+    }
+
+    _initGame = () => {
+        this.word = dataAPI[Math.floor(Math.random() * dataAPI.length)].toUpperCase();
+
+        this.setState({
+            letters: [],
+            nbTry: 0,
+            tryLetters: [],
+            isPlaying: true
+        });
     }
 
     _showWord = () => {
@@ -97,8 +118,9 @@ export default class LinksScreen extends React.Component {
                 tryLetters: [...this.state.tryLetters, letter]
             },() => {
                 if (this.state.tryLetters.length >= (this.images.length - 1)) {
-                    alert('Perdu ! ' + this.word)
-                    this._initGame()
+                    console.log('perdu')
+                    console.log(this.pts, this.word)
+                    winGame.bind(this)(KEY);
                 }
             });
         }
@@ -114,35 +136,29 @@ export default class LinksScreen extends React.Component {
             }
 
             if (nbWin >= l) {
-                alert("gagné !");
-                this._initGame()
+                winGame.bind(this)(KEY);
             }
         }
     }
 
-    _initGame = () => {
-        this.word = dataAPI[Math.floor(Math.random() * dataAPI.length)].toUpperCase();
-
-        this.setState({
-            letters: [],
-            nbTry: 0,
-            tryLetters: []
-        });
-    }
-
-    render() {
+    _renderGame = () => {
+        this.pts = this.images.length - this.state.tryLetters.length - 1;
         return (
             <View style={Layout.container}>
+                <Back navigation={this.props.navigation} action={() => {
+                    backGame.bind(this)(KEY);
+                }} />
+
                 <View style={styles.word}>
                     {this._showWord()}
                 </View>
 
-                <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
                     <Image
                         source={this.images[this.state.tryLetters.length]}
                         style={{ width: 250, height: 250 }}
-                        // resizeMode="cover"
                     />
+                    <Text>{this.pts} points</Text>
                 </View>
 
 
@@ -163,6 +179,22 @@ export default class LinksScreen extends React.Component {
             </View>
         );
     }
+
+    render() {
+        const lastGame = this.word ? [this.pts, this.word] : null;
+
+        console.log(this.word, lastGame);
+
+        return (this.state.isPlaying) ? (
+            this._renderGame()
+        ) : <LaunchGame
+                title="PENDU"
+                action={this._initGame}
+                score={this.state.score}
+                lastGame={lastGame}
+                rules="Tu dois trouver le mot caché en devinant les lettres une par une. Attention, tes tentatives sont limitées ! Bonne chance !"
+            />
+    }
 }
 
 const styles = StyleSheet.create({
@@ -170,13 +202,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 50,
-        marginTop: 100,
+        marginTop: 50,
     },
     lettersContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        // marginVertical: 1
     },
     letterContainer: {
         margin: 1,

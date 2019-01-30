@@ -1,20 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableWithoutFeedback, Animated, Easing } from 'react-native';
-import {shuffle} from '../constants/Utils';
+import { shuffle, backGame, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
+import { getScore } from '../utils/data'
 
+import Back from '../components/Back'
 import LaunchGame from '../components/LaunchGame'
 
-// TODO : 
-// TODO - design cards
-// TODO - timer
-// TODO - save best score
-
-// OK :
-// TODO - remove useless map
-// TODO - nb moves 
-// TODO - replay
-// TODO - animation return
+const KEY = 'memory';
 
 const cardWidth = 80;
 const nbColumns = 4;
@@ -33,21 +26,30 @@ export default class MemoryScreen extends React.Component {
 
         this.waitForAnim = 0;
         this.animDuration = 400;
+        this.pts = 440;
 
         this.state = {
             isPlaying: false
         }
     }
 
+    componentWillMount() {
+        getScore(KEY, (score) => {
+            this.setState({
+                score
+            });
+        });
+    }
+
     _initGame = () => {
-        var values = ['red', 'lightblue', 'green', 'lightgrey', 'orange', 'pink', 'darkblue', 'yellowgreen'];
-        // var values = ['red', 'lightblue', 'green'];
+        const values = ['red', 'lightblue', 'green', 'lightgrey', 'orange', 'pink', 'darkblue', 'yellowgreen'];
+        // const values = ['red', 'lightblue', 'green'];
 
         var cards = [];
 
         for (let i = 0, l = values.length; i < l; i++) {
-            cards.push({color: values[i], status: 0});
-            cards.push({color: values[i], status: 0});
+            cards.push({ color: values[i], status: 0 });
+            cards.push({ color: values[i], status: 0 });
         }
 
         cards = shuffle(cards);
@@ -68,6 +70,9 @@ export default class MemoryScreen extends React.Component {
 
         if (this.currents.length === 1) {
             this.nbMove++;
+            this.pts += - 5;
+            if (this.pts < 0) this.pts = 0;
+
             const current = this.currents[0];
             if (current.color === card.color) {
                 // 2a) Lock winning cards
@@ -76,9 +81,7 @@ export default class MemoryScreen extends React.Component {
                 this.nbToWin--;
 
                 if (this.nbToWin <= 0) {
-                    this.setState({
-                        isPlaying: false,
-                    });
+                    winGame.bind(this)(KEY);
                     return;
                 }
                 this.currents = [];
@@ -88,7 +91,7 @@ export default class MemoryScreen extends React.Component {
             }
 
         } else {
-            if(this.currents.length === 2) {
+            if (this.currents.length === 2) {
                 // Hide the 2 currents cards
                 cards[this.currents[0].index].status = 0;
                 cards[this.currents[1].index].status = 0;
@@ -128,46 +131,56 @@ export default class MemoryScreen extends React.Component {
         }
     }
 
-    render() {
-        return (this.state.isPlaying) ? (
-            <View style={[Layout.container, {alignItems: 'center'}]}>
+    _renderGame = () => {
+        return (
+            <View style={[Layout.container, { alignItems: 'center' }]}>
+                <Back navigation={this.props.navigation} action={() => {
+                    backGame.bind(this)(KEY);
+                }} />
                 <View style={styles.cards}>
-                {
-                    this.state.cards.map((card, i) => {
-                        if (card.status !== 0) {
-                            var color = card.color;
-                            var spin = '0deg';
+                    {
+                        this.state.cards.map((card, i) => {
+                            if (card.status !== 0) {
+                                var color = card.color;
+                                var spin = '0deg';
 
-                            if (this.currents.length > 0) {
-                                if (card.index === this.currents[this.currents.length - 1].index) {
-                                    spin = this.spinValue.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: ['0deg', '180deg']
-                                    });
-                            
-                                    color = this.colorValue.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: ['#292929', card.color]
-                                    });
+                                if (this.currents.length > 0) {
+                                    if (card.index === this.currents[this.currents.length - 1].index) {
+                                        spin = this.spinValue.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: ['0deg', '180deg']
+                                        });
+
+                                        color = this.colorValue.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: ['#292929', card.color]
+                                        });
+                                    }
                                 }
-                            }
 
-                            return (<Animated.View style={[styles.card, {backgroundColor: color, transform: [{rotateY: spin}]}]} key={i}></Animated.View>)
-                        } else {
-                            return (<TouchableWithoutFeedback key={i} onPress={() => {
+                                return (<Animated.View style={[styles.card, { backgroundColor: color, transform: [{ rotateY: spin }] }]} key={i}></Animated.View>)
+                            } else {
+                                return (<TouchableWithoutFeedback key={i} onPress={() => {
                                     if ((Date.now() - this.waitForAnim) > this.animDuration) {
                                         this._pick(card, i);
                                     }
                                 }}>
-                                <View  style={styles.card}></View>
-                             </TouchableWithoutFeedback>)
-                        }
-                    })
-                }
+                                    <View style={styles.card}></View>
+                                </TouchableWithoutFeedback>)
+                            }
+                        })
+                    }
                 </View>
-                <Text style={{fontWeight: 'bold', marginTop: 20}}>{this.nbMove} coup{this.nbMove > 1 ? 's' : ''}</Text>
+                <Text style={{ fontWeight: 'bold', marginTop: 20 }}>{this.nbMove} coup{this.nbMove > 1 ? 's' : ''}</Text>
+                <Text style={{ fontWeight: 'bold', marginTop: 20 }}>{this.pts} point{this.pts > 1 ? 's' : ''}</Text>
             </View>
-        ) : <LaunchGame 
+        )
+    }
+
+    render() {
+        return (this.state.isPlaying) ? (
+            this._renderGame()
+        ) : <LaunchGame
                 title="MEMORY"
                 action={this._initGame}
                 score={this.state.score}

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Layout from '../constants/Layout'
 
 import Back from '../components/Back'
+import Colors from '../constants/Colors';
 
 export default class GuessForeheadScreen extends React.Component {
     static navigationOptions = {
@@ -69,7 +70,7 @@ export default class GuessForeheadScreen extends React.Component {
 
                 <View style={styles.btnContainer}>
                     <TouchableOpacity
-                        style={[styles.btn, {backgroundColor: '#80be00'}]}
+                        style={[styles.btn, {backgroundColor: Colors.true}]}
                         onPress={() => {
                             this.setState({
                                 pts: this.state.pts + 1
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     btn: {
         padding: 20,
         paddingHorizontal: 50,
-        backgroundColor: '#eb694b',
+        backgroundColor: Colors.false,
         borderRadius: 5
     },
     textBtn: {
