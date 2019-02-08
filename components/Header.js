@@ -34,19 +34,6 @@ export default class CustomHeader extends React.Component {
         this._getUser();
     }
 
-    _showOptions = () => {
-        if (!this.props.hideOptions) {
-            const imageUri = (this.state.image && this.state.image.length > 0) ? {uri: this.state.image} : require('../assets/images/avatar.png');
-            return (
-                <TouchableOpacity style={styles.options} onPress={() => {
-                    this.props.navigation.navigate("Settings")
-                }}>
-                    <Image source={imageUri} style={{width: 40, height: 40, backgroundColor: 'black', borderRadius: 20}}/>
-                </TouchableOpacity>
-            )
-        }
-    }
-
     render() {
         return (
             <LinearGradient
@@ -56,10 +43,6 @@ export default class CustomHeader extends React.Component {
                 style={styles.container}
             >
                 <Text style={styles.title}>Guess My Game</Text>
-                {
-                    //this._showOptions()
-                }
-                
             </LinearGradient>
         )
     }

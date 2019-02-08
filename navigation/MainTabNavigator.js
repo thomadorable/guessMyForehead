@@ -16,116 +16,113 @@ import GamesScreen from '../screens/GamesScreen';
 import Header from '../components/Header'
 import Colors from '../constants/Colors';
 
-// const ForeheadStack = createStackNavigator({
-//     Home: ThemeForeheadScreen
-// });
+const ForeheadStack = createStackNavigator({
+    Home: ThemeForeheadScreen
+});
 
-// ForeheadStack.navigationOptions = {
-//     tabBarLabel: 'Guess',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-eye' : 'md-eye'}
-//         />
-//     ),
-// };
+ForeheadStack.navigationOptions = {
+    tabBarLabel: 'Guess',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-eye' : 'md-eye'}
+        />
+    ),
+};
 
-// const HangmanStack = createStackNavigator({
-//     Links: HangmanScreen,
-// });
+const HangmanStack = createStackNavigator({
+    Links: HangmanScreen,
+});
 
-// HangmanStack.navigationOptions = {
-//     tabBarLabel: 'Pendu',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-man' : 'md-man'}
-//         />
-//     ),
-// };
+HangmanStack.navigationOptions = {
+    tabBarLabel: 'Pendu',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-man' : 'md-man'}
+        />
+    ),
+};
 
-// const SnakeStack = createStackNavigator({
-//     Snake: SnakeScreen,
-// });
+const SnakeStack = createStackNavigator({
+    Snake: SnakeScreen,
+});
 
-// SnakeStack.navigationOptions = {
-//     tabBarLabel: 'Snake',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-paw' : 'md-paw'}
-//         />
-//     ),
-// };
+SnakeStack.navigationOptions = {
+    tabBarLabel: 'Snake',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-paw' : 'md-paw'}
+        />
+    ),
+};
 
-// const MemoryStack = createStackNavigator({
-//     Memory: MemoryScreen,
-// });
+const MemoryStack = createStackNavigator({
+    Memory: MemoryScreen,
+});
 
-// MemoryStack.navigationOptions = {
-//     tabBarLabel: 'Memory',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-card' : 'md-card'}
-//         />
-//     )
-// };
+MemoryStack.navigationOptions = {
+    tabBarLabel: 'Memory',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-card' : 'md-card'}
+        />
+    )
+};
 
-// const QuizzStack = createStackNavigator({
-//     Quizz: {
-//         screen: QuizzScreen,
-//     }
-// });
+const QuizzStack = createStackNavigator({
+    Quizz: {
+        screen: QuizzScreen,
+    }
+});
 
-// QuizzStack.navigationOptions = {
-//     tabBarLabel: 'Quizz',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-help' : 'md-help'}
-//         />
-//     )
-// };
+QuizzStack.navigationOptions = {
+    tabBarLabel: 'Quizz',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-help' : 'md-help'}
+        />
+    )
+};
 
-// const Z048Stack = createStackNavigator({
-//     Z048: {
-//         screen: Z048Screen,
-//     }
-// });
+const Z048Stack = createStackNavigator({
+    Z048: {
+        screen: Z048Screen,
+    }
+});
 
-// Z048Stack.navigationOptions = {
-//     tabBarLabel: '2048',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-infinite' : 'md-infinite'}
-//         />
-//     )
-// };
+Z048Stack.navigationOptions = {
+    tabBarLabel: '2048',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-infinite' : 'md-infinite'}
+        />
+    )
+};
 
-// const TicTacToeStack = createStackNavigator({
-//     Z048: {
-//         screen: TicTacToeScreen,
-//     }
-// });
+const TicTacToeStack = createStackNavigator({
+    Z048: {
+        screen: TicTacToeScreen,
+    }
+});
 
-// TicTacToeStack.navigationOptions = {
-//     tabBarLabel: 'TicTacToe',
-//     tabBarIcon: ({ focused }) => (
-//         <TabBarIcon
-//             focused={focused}
-//             name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
-//         />
-//     )
-// };
+TicTacToeStack.navigationOptions = {
+    tabBarLabel: 'TicTacToe',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
+        />
+    )
+};
 
 const GamesStack = createStackNavigator({
     Games: {
         screen: GamesScreen,
-        navigationOptions: {
-            header: props => <Header {...props} hideOptions={true} />,
-        },
     }
 });
 
@@ -142,9 +139,6 @@ GamesStack.navigationOptions = {
 const OptionsStack = createStackNavigator({
     Options: {
         screen: OptionsScreen,
-        navigationOptions: {
-            header: props => <Header {...props} hideOptions={true} />,
-        },
     }
 });
 
@@ -168,18 +162,37 @@ OptionsStack.navigationOptions = {
     )
 };
 
-export default createBottomTabNavigator({
-    // TicTacToeStack,
-    // Z048Stack,
-    // SnakeStack,
-    // ForeheadStack,
-    // HangmanStack,
-    // MemoryStack,
-    // QuizzStack,
+const TabNav = createBottomTabNavigator({
     GamesStack,
     OptionsStack
 }, {
     tabBarOptions: {
         activeTintColor: Colors.tabIconSelected
     }
+});
+
+
+const GamesNav = createStackNavigator({
+    TicTacToeStack,
+    Z048Stack,
+    SnakeStack,
+    ForeheadStack,
+    HangmanStack,
+    MemoryStack,
+    QuizzStack,
+});
+
+export default createStackNavigator({
+    Root: {
+      screen: TabNav,
+      navigationOptions: {
+            header: props => <Header {...props} />,
+        }
+    },
+    Games: {
+        screen: GamesNav,
+        navigationOptions: {
+            header: props => <Header {...props} />,
+        },
+    },
 });

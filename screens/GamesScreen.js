@@ -19,6 +19,8 @@ export default class GamesScreen extends React.Component {
 
         this.key = 'games';
 
+        // this.props.navigation.navigate('Memory')
+
     }
 
 
