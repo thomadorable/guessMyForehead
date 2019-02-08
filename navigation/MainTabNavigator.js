@@ -123,6 +123,9 @@ import Colors from '../constants/Colors';
 const GamesStack = createStackNavigator({
     Games: {
         screen: GamesScreen,
+        navigationOptions: {
+            header: props => <Header {...props} hideOptions={true} />,
+        },
     }
 });
 
@@ -140,11 +143,20 @@ const OptionsStack = createStackNavigator({
     Options: {
         screen: OptionsScreen,
         navigationOptions: {
-            title: 'Notifications',
             header: props => <Header {...props} hideOptions={true} />,
         },
     }
 });
+
+OptionsStack.navigationOptions = {
+    tabBarLabel: 'Options',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'}
+        />
+    )
+};
 
 OptionsStack.navigationOptions = {
     tabBarLabel: 'Profil',
@@ -156,7 +168,7 @@ OptionsStack.navigationOptions = {
     )
 };
 
-var TabNav = createBottomTabNavigator({
+export default createBottomTabNavigator({
     // TicTacToeStack,
     // Z048Stack,
     // SnakeStack,
@@ -171,22 +183,3 @@ var TabNav = createBottomTabNavigator({
         activeTintColor: Colors.tabIconSelected
     }
 });
-
-
-const StacksOverTabs = createStackNavigator({
-    Root: {
-      screen: TabNav,
-      navigationOptions: {
-            header: props => <Header {...props} />,
-        }
-    },
-    // Settings: {
-    //     screen: OptionsScreen,
-    //     navigationOptions: {
-    //         title: 'Notifications',
-    //         header: props => <Header {...props} hideOptions={true} />,
-    //     },
-    // },
-  });
-  
-  export default StacksOverTabs;
