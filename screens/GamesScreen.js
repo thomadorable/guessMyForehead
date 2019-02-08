@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Easing } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Easing, ImageBackground } from 'react-native';
 import { shuffle, backGame, initScore, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
 import Colors from '../constants/Colors'
@@ -19,36 +19,78 @@ export default class GamesScreen extends React.Component {
 
         this.key = 'games';
 
-        // this.props.navigation.navigate('Memory')
+        this.images = [
+            require('../assets/images/games/guess.jpeg'),
+            require('../assets/images/games/pendu.jpeg'),
+            require('../assets/images/games/snake.jpeg'),
+            require('../assets/images/games/memory.jpeg'),
+            require('../assets/images/games/quizz.jpeg'),
+            require('../assets/images/games/2048.jpeg'),
+            require('../assets/images/games/tictactoe.jpeg')
+        ];
 
+        this.state = {
+            games: [
+                'Guess',
+                'Pendu',
+                'Snake',
+                'Memory',
+                'Quizz',
+                '2048',
+                'TicTacToe'
+            ] 
+        }
+    }
+
+    _launchGame = (value) => {
+        console.log('launch', value);
+        this.props.navigation.navigate(value)
     }
 
 
+    _customButton = () => {
+        return (
+            <View style={{padding: 30}}>
+                {
+                    this.state.games.map(
+                        (value, index) => {
+                            return <TouchableOpacity
+                                key={index}
+                                onPress={() => {
+                                    this._launchGame(value);
+                                }}
+                            >
+                                <ImageBackground 
+                                    imageStyle={{ borderRadius: 5, opacity: 0.7 }}
+                                    style={styles.theme} 
+                                    source={this.images[index]}
+                                >
+                                    <Text style={styles.themeText}>{value}</Text>
+                                </ImageBackground>
+                            </TouchableOpacity>
+                        }
+                    )
+                }
+            </View>
+        )
+    }
 
-
-
-
-
-    
 
     render = () => {
         return (
-            <View style={[Layout.container, { alignItems: 'center' }]}>
+            <View style={[Layout.container, { alignItems: 'center'}]}>
 
                 <View>
                     <Text>Les jeux</Text>
                 </View>
 
-                <View>
-                    <Text>Guess</Text>
-                    <Text>Pendu</Text>
-                    <Text>Snake</Text>
-                    <Text>Memory</Text>
-                    <Text>Quizz</Text>
-                    <Text>2048</Text>
-                    <Text>TicTacToe</Text>
-                </View>
-                
+
+                <ScrollView style={styles.scrollContainer}>
+                    {
+                        this._customButton()
+                    }
+                </ScrollView>
+
             </View>
 
             
@@ -59,22 +101,22 @@ export default class GamesScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-    container: {
+    scrollContainer: {
         flex: 1,
-        backgroundColor: Colors.grey
+        width: '100%'
     },
-    btn: {
-        fontSize: 10,
-        width: 40,
-        height: 40,
-        borderRadius: 40,
-        borderColor: '#999',
-        borderWidth: 1,
+    theme: {
+        backgroundColor: '#292929',
+        justifyContent: 'center',
+        marginBottom: 20,
+        height: 150,
+        borderRadius: 5
     },
-    btnText: {
-        fontSize: 16,
-        lineHeight: 40,
+    themeText: {
         textAlign: 'center',
-        color: '#999'
+        color: 'white',
+        letterSpacing: 5,
+        fontSize: 20,
+        textTransform: 'uppercase'
     }
 });
