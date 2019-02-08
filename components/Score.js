@@ -13,7 +13,7 @@ export default class Score extends React.Component {
             const unit = (this.props.value > 1) ? plurial : this.props.unit;
 
             return (
-                <Text style={styles.ptsText}>{unit}</Text>
+                <Text style={styles.unit}>{unit}</Text>
             )
         }
     }
@@ -34,14 +34,13 @@ const styles = StyleSheet.create({
     pts: {
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 80,
+        fontSize: 50,
         color: Colors.blue,
-        
     },
-    ptsText: {
+    unit: {
         textAlign: 'center',
-        fontSize: 18,
-        marginTop: -10,
+        fontSize: 14,
+        marginTop: -5,
         color: Colors.green,
         opacity: 0.7,
     },

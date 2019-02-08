@@ -15,12 +15,16 @@ export default class GuessForehead extends React.Component {
             <View style={Layout.container}>
                 <Back navigation={this.props.navigation} action={this.props.backAction} />
 
+                <Text style={styles.timer}>{this.props.timer} secondes</Text>
+
                 <View style={styles.guessContainer}>
                     <Text style={styles.guess}>{this.props.value}</Text>
-                        <Text style={styles.timer}>{this.props.timer}s | {this.props.pts}</Text>
                 </View>
 
+                <Text style={styles.pts}>{this.props.pts} points</Text>
+
                 <View style={styles.btnContainer}>
+
                     <TouchableOpacity
                         style={[styles.btn, {backgroundColor: Colors.true}]}
                         onPress={() => {
@@ -57,7 +61,12 @@ const styles = StyleSheet.create({
         color: '#2c63b7'
     },
     timer: {
-        marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 22,
+        textAlign: 'center',
+        color: '#555'
+    },
+    pts: {
         fontWeight: 'bold',
         fontSize: 22,
         textAlign: 'center',

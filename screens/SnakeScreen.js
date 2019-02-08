@@ -8,16 +8,6 @@ import LaunchGame from '../components/LaunchGame'
 
 const centerX = Math.round(Layout.window.width / 2);
 
-// TODO : 
-// - design
-// - pouvoir mettre pause
-// - créer des bonus placé aléatoirement
-// - collision avec les bonus qui font rapetissir ?
-// - ne pas pouvoir faire demi-tour
-// - ne pas pouvoir sortir de l'écran
-// - show best score 
-
-
 export default class SnakeScreen extends React.Component {
     static navigationOptions = {
         header: null,
@@ -203,7 +193,7 @@ export default class SnakeScreen extends React.Component {
                 title="Snake"
                 action={this._initGame}
                 score={this.state.score}
-                rules="Tu dois trouver le mot caché en devinant les lettres une par une. Attention, tes tentatives sont limitées ! Bonne chance !"
+                rules="Guide le serpent à l'aide des flèches sans toucher les murs. Attention à ne pas l'emmêler ! Bonne chance !"
             />
     }
 }

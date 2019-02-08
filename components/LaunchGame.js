@@ -7,7 +7,8 @@ import { LinearGradient } from 'expo';
 import Colors from '../constants/Colors'
 import { Icon } from 'expo';
 
-const KEY = 'hangman';
+import Back from '../components/Back'
+
 
 export default class LaunchGame extends React.Component {
     constructor(props) {
@@ -113,11 +114,14 @@ export default class LaunchGame extends React.Component {
 
         return (
         <View style={Layout.container}>
+
+            <Text style={styles.gameTitle}>{this.props.title}</Text>
+
             <TouchableOpacity onPress={() => {
                 this._toggleRules(false);
             }} style={styles.rulesContainer} onLayout={this._setMaxHeight.bind(this)}>
                 <Animated.View style={[{overflow: 'hidden', opacity: opacity}, setMaxHeight]}>
-                    <Text style={styles.title}>{this.props.title} | Règles du jeu</Text>
+                    <Text style={styles.title}>Règles du jeu</Text>
                     <Text style={styles.rules}>
                         {this.props.rules}
                     </Text>
@@ -132,6 +136,9 @@ export default class LaunchGame extends React.Component {
                     </Animated.View>
                 </Animated.View>
             </TouchableOpacity>
+
+
+            {/* <Back navigation={this.props.navigation} />  */}
 
             {
                 this.props.score && this.props.score.games.ended > 0 && (
@@ -170,6 +177,13 @@ export default class LaunchGame extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    gameTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 30,
+        color: Colors.blue,
+        margin: 30
+    },
     title: {
         fontWeight: 'bold',
         letterSpacing: 1,

@@ -28,7 +28,7 @@
         ]
     },
     {
-        "question": "Comment changer une propriété « name » à l’intérieur d’un composant de Classe : « React.Component » ? *",
+        "question": "Comment changer une propriété « name » à l’intérieur d’un composant de Classe : « React.Component » ?",
         "answers": [{
                 "value": "C’est impossible les propriétés d’un composant sont en lecture seule.",
                 "isWin": true
@@ -41,7 +41,7 @@
         ]
     },
     {
-        "question": "Comment accéder à l’état d’un composant depuis l’intérieur d’une fonction membre ? *",
+        "question": "Comment accéder à l’état d’un composant depuis l’intérieur d’une fonction membre ?",
         "answers": [{
                 "value": "this.state",
                 "isWin": true

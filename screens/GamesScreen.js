@@ -36,14 +36,13 @@ export default class GamesScreen extends React.Component {
                 'Snake',
                 'Memory',
                 'Quizz',
-                '2048',
+                'Z048',
                 'TicTacToe'
             ] 
         }
     }
 
     _launchGame = (value) => {
-        console.log('launch', value);
         this.props.navigation.navigate(value)
     }
 
@@ -81,7 +80,7 @@ export default class GamesScreen extends React.Component {
             <View style={[Layout.container, { alignItems: 'center'}]}>
 
                 <View>
-                    <Text>Les jeux</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 20, margin: 30}}>Choisissez un jeu :</Text>
                 </View>
 
 

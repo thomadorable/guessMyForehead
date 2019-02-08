@@ -212,24 +212,6 @@ export default class Z048Screen extends React.Component {
         })
     }
 
-    onSwipe(gestureName, gestureState) {
-        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-        this.setState({gestureName: gestureName});
-        switch (gestureName) {
-          case SWIPE_UP:
-            console.log('up')
-            break;
-          case SWIPE_DOWN:
-            console.log('down')
-            break;
-          case SWIPE_LEFT:
-            console.log('left')
-            break;
-          case SWIPE_RIGHT:
-            console.log('right')
-            break;
-        }
-      }
 
     _renderGame = () => {
         return (
@@ -237,14 +219,17 @@ export default class Z048Screen extends React.Component {
                 <Back navigation={this.props.navigation} action={() => {
                     backGame.bind(this)();
                 }} />
+
+                <Text style={{marginBottom: 30}}>{this.pts} points</Text>
+
                 
-                <View style={{width: 4 * 54, flexDirection: 'row', flexWrap: 'wrap'}}>
+                <View style={{width: 4 * 64, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {
                     this.state.cards && this.state.cards.map((value, index) => {
                         const display = value > 0 ? Math.pow(2, value) : null;
                         const color = value > 0 ? this.colors[value] : 'lightgrey';
                         return(
-                            <View key={index} style={{width: 50, height: 50, backgroundColor: color, margin: 2, alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
+                            <View key={index} style={{width: 60, height: 60, backgroundColor: color, margin: 2, alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
                                 <Text style={{textAlign: 'center'}}>{display}</Text>
                             </View>
                         )
@@ -252,9 +237,7 @@ export default class Z048Screen extends React.Component {
                 }
                 </View>
 
-                <Text>{this.pts} points</Text>
-
-                {/* <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15, marginTop: 30}}>
                     <TouchableOpacity style={styles.btn} onPress={() => {
                         this._movement('top')
                     }}>
@@ -280,25 +263,7 @@ export default class Z048Screen extends React.Component {
                     }}>
                             <Text style={[styles.btnText, {transform: [{ rotate: '180deg'}]}]}>^</Text>
                     </TouchableOpacity>
-                </View> */}
-
-                <GestureRecognizer
-                    onSwipe={(direction, state) => this.onSwipe(direction, state)}
-                    // onSwipeUp={(state) => this.onSwipeUp(state)}
-                    // onSwipeDown={(state) => this.onSwipeDown(state)}
-                    // onSwipeLeft={(state) => this.onSwipeLeft(state)}
-                    // onSwipeRight={(state) => this.onSwipeRight(state)}
-                    config={{
-                        velocityThreshold: 0.3,
-                        directionalOffsetThreshold: 80
-                    }}
-                    style={{
-                        flex: 1,
-                        backgroundColor: 'red'
-                    }}
-                    >
-                    <Text>hello</Text>
-                </GestureRecognizer>
+                </View>
             </View>
         )
     }
@@ -310,7 +275,7 @@ export default class Z048Screen extends React.Component {
                 title="2048"
                 action={this._initGame}
                 score={this.state.score}
-                rules="Il faut fusionner les chiffres ensemble."
+                rules="Il faut fusionner les chiffres identiques pour atteindre 2048. Bonne chance !"
             />
     }
 }
@@ -323,16 +288,16 @@ const styles = StyleSheet.create({
     },
     btn: {
         fontSize: 10,
-        width: 40,
-        height: 40,
-        borderRadius: 40,
-        borderColor: '#999',
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        borderColor: Colors.blue,
         borderWidth: 1,
     },
     btnText: {
         fontSize: 16,
-        lineHeight: 40,
+        lineHeight: 50,
         textAlign: 'center',
-        color: '#999'
+        color: Colors.blue
     }
 });

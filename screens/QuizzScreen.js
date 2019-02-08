@@ -19,7 +19,7 @@ export default class QuizzScreen extends React.Component {
         this.state = {};
         this.key = 'quizz';
 
-        this.nbQuestions = 10;
+        this.nbQuestions = 4;
     }
 
     componentWillMount() {
@@ -80,13 +80,15 @@ export default class QuizzScreen extends React.Component {
                     backGame.bind(this)();
                 }} />
                 <View style={styles.guessContainer}>
+                    <Text style={styles.timer}>{this.nbQuestions - this.questions.length} / {this.nbQuestions}</Text>
+
                     <Text style={styles.guess}>
                         {this.state.question.question}
                     </Text>
 
-                    <Text style={styles.timer}>{this.pts} pts</Text>
-                    <Text style={styles.timer}>{this.nbQuestions - this.questions.length} / {this.nbQuestions}</Text>
                 </View>
+
+                <Text style={[styles.timer, {marginTop: 20}]}>{this.pts} points</Text>
 
                 <View style={styles.btnContainer}>
                     {this._showButton(0)}
@@ -109,19 +111,19 @@ export default class QuizzScreen extends React.Component {
 const styles = StyleSheet.create({
     guessContainer: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingVertical: 20
+        paddingHorizontal: 30,
     },
     guess: {
         fontWeight: 'bold',
         fontSize: 25,
-        lineHeight: 40,
+        lineHeight: 30,
         textAlign: 'center',
         color: '#2c63b7'
     },
     timer: {
-        marginTop: 10,
+        marginBottom: 20,
         fontWeight: 'bold',
         fontSize: 22,
         textAlign: 'center',
@@ -130,7 +132,6 @@ const styles = StyleSheet.create({
     btnContainer: {
         flexDirection: 'row',
         padding: 10,
-        justifyContent: 'space-between'
     },
     btn: {
         padding: 10,

@@ -6,7 +6,19 @@ import LaunchGame from '../components/LaunchGame'
 import GuessForehead from '../components/GuessForehead'
 import { getScore } from '../utils/data'
 import dataAPI from '../assets/data/guessMyForehead.json';
+import Colors from '../constants/Colors';
 
+var allValues = [];
+for (let i = 0, l = dataAPI.length; i < l; i++) {
+    const data = dataAPI[i];
+
+    allValues = allValues.concat(data.values);
+}
+
+dataAPI.unshift({
+    "title": "Random",
+    "values": allValues
+});
 
 export default class ThemeForeheadScreen extends React.Component {
     static navigationOptions = {
@@ -28,21 +40,8 @@ export default class ThemeForeheadScreen extends React.Component {
             require('../assets/images/forehead/music.jpg'),
             require('../assets/images/forehead/animals.jpg'),
             require('../assets/images/forehead/blockbuster.jpg'),
-            require('../assets/images/forehead/food.jpg'),
-            require('../assets/images/forehead/stars.jpg')
+            require('../assets/images/forehead/food.jpg')
         ];
-
-        var allValues = [];
-        for (let i = 0, l = dataAPI.length; i < l; i++) {
-            const data = dataAPI[i];
-
-            allValues = allValues.concat(data.values);
-        }
-
-        dataAPI.unshift({
-            "title": "Random",
-            "values": allValues
-        });
 
         initScore.bind(this)();
     }
@@ -127,28 +126,30 @@ export default class ThemeForeheadScreen extends React.Component {
                     this.selectValue();
                 }}
             />
-        ) : <LaunchGame
-                title="Guess My Forehead"
-                action={this._initGame}
-                score={this.state && this.state.score}
-                rules="Choisis un thème et fais deviner un maximum de mots dans un temps limité. Tu peux utiliser des phrases sans souci. Bonne chance !"
-                customPlayButton={this._customPlayButton}
-            />
+        ) : (
+            <ScrollView style={styles.scrollContainer}>
+                <LaunchGame
+                    title="Guess My Forehead"
+                    action={this._initGame}
+                    score={this.state && this.state.score}
+                    rules="Choisis un thème et fais deviner un maximum de mots dans un temps limité. Tu peux utiliser des phrases sans souci. Bonne chance !"
+                    customPlayButton={this._customPlayButton}
+                />
+            </ScrollView>
+            )
     }
 
     render() {
-        return(
-            <ScrollView style={styles.scrollContainer}>
-                {this._returnGameOrMenu()}
-            </ScrollView>
-        )
+        return this._returnGameOrMenu();
     }
 }
 
 const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
-        width: '100%'
+        width: '100%',
+        height: '100%',
+        backgroundColor: Colors.grey
     },
     theme: {
         backgroundColor: '#292929',

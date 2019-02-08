@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Image, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { AsyncStorage } from "react-native"
 import { ImagePicker } from 'expo';
 
 import Back from '../components/Back'
 import Layout from '../constants/Layout'
+import Colors from '../constants/Colors';
 
 export default class OptionsScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
 
     constructor(props) {
         super(props);
@@ -62,8 +66,6 @@ export default class OptionsScreen extends React.Component {
         });
     }
 
-
-
     _checkCameraPermissions = async () => {
         Keyboard.dismiss();
         const { Location, Permissions } = Expo;
@@ -76,12 +78,7 @@ export default class OptionsScreen extends React.Component {
     render() {
         const imageUri = (this.state.user.image && this.state.user.image.length > 0) ? {uri: this.state.user.image} : require('../assets/images/avatar.png');
         return (
-            <View style={[Layout.container, {justifyContent: 'flex-start', paddingTop: 0}]}>
-                {/* <Back navigation={this.props.navigation} action={() => {
-                    this._setUser();
-                    this.props.navigation.pop();
-                }} /> */} 
-
+            <View style={[Layout.container, {justifyContent: 'space-between', paddingTop: 50}]}>
                 <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                     <View style={{width: 250}}>
                         <Text style={styles.label}>Choisis ton pseudo </Text>
@@ -97,6 +94,8 @@ export default class OptionsScreen extends React.Component {
                                 this.setState({
                                     user: user
                                 })
+
+                                this._setUser();
                             }}
                             value={this.state.user.pseudo}
                             onEndEditing={() => {
@@ -120,30 +119,29 @@ export default class OptionsScreen extends React.Component {
 
                         <Button onPress={() => {
                             this._updateImage('');
-                        }} title="Supprimer"/>
+                        }} title="Supprimer la photo"/>
 
 
-                        <Button onPress={() => {
+                        <TouchableOpacity style={{backgroundColor: Colors.false, padding: 20, marginTop: 30, color: 'white', borderRadius: 5}} onPress={() => {
                             AsyncStorage.clear();
                             this.setState({
                                 user: {}
-                            })
-                        }} title="Supprimer toutes mes données"/>
+                            });
+                        }} >
+                            <Text style={{color: 'white'}}>Supprimer toutes mes données</Text>
+                        </TouchableOpacity>
 
                     </View>
+
                 </View>
 
+                <Text style={{fontWeight: 'bold', fontStyle: 'italic', padding: 30, textAlign: 'center'}}> * Les données sont enregistrées automatiquement à chaque modifications.</Text>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    backContainer: {
-        marginBottom: 30,
-        padding: 20,
-        backgroundColor: '#DFDFDF',
-    },
     label: {
         fontWeight: 'bold',
         marginBottom: 10

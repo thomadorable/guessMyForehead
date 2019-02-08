@@ -167,35 +167,40 @@ export default class TicTacToeScreen extends React.Component {
         } else {
             text = "C'est à " + name + " de jouer !"
         }
-        return <Text style={{ fontWeight: 'bold', marginTop: 20 }}>{text}</Text>
+        return <Text style={{ fontWeight: 'bold', marginBottom: 30, textAlign: 'center' }}>{text}</Text>
     }
 
     
 
     _renderGame = () => {
         return (
-            <View style={[Layout.container, { alignItems: 'center' }]}>
+            <View style={[Layout.container, { alignItems: 'center'}]}>
                 <Back navigation={this.props.navigation} action={() => {
                     backGame.bind(this)();
                 }} />
 
-                <View style={{width: 3 * 108, flexDirection: 'row', flexWrap: 'wrap'}}>
-                {
-                    this.state.cards && this.state.cards.map((value, index) => {
-                        return(
-                            <TouchableOpacity onPress={() => { 
-                                this._play(index)
-                            }} 
-                            key={index} style={{width: 100, height: 100, backgroundColor: 'lightgrey', margin: 4}}>
-                                <Text style={{textAlign: 'center'}}>{value}</Text>
-                            </TouchableOpacity>
-                        )
-                    })
-                }
+                <View style={{flexDirection: 'column', justifyContent: 'center', flex: 1}}>
+                    <View>
+                        {this._text()}
+                    </View>
+
+                    <View style={{width: 3 * 98, flexDirection: 'row', flexWrap: 'wrap'}}>
+                    {
+                        this.state.cards && this.state.cards.map((value, index) => {
+                            const color = value === 'X' ? Colors.blue : Colors.green;
+                            return(
+                                <TouchableOpacity onPress={() => { 
+                                    this._play(index)
+                                }} 
+                                key={index} style={{width: 90, height: 90, backgroundColor: 'lightgrey', margin: 4, borderRadius: 5, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: color}}>{value}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                    </View>
                 </View>
-                <View>
-                    {this._text()}
-                </View>
+
             </View>
 
             
