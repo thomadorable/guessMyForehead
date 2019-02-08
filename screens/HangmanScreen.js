@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import dataAPI from '../assets/data/hangman.json';
-import { backGame, winGame } from '../constants/Utils';
+import { backGame, winGame, initScore } from '../constants/Utils';
 import Layout from '../constants/Layout'
 import { getScore } from '../utils/data'
 
@@ -39,14 +39,8 @@ export default class HangmanScreen extends React.Component {
         this.state = {
             isPlaying: false
         }
-    }
 
-    componentWillMount() {
-        getScore(this.key, (score) => {
-            this.setState({
-                score,
-            });
-        });
+        initScore.bind(this)();
     }
 
     _initGame = () => {

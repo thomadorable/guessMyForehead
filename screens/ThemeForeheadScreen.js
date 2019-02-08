@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
-import { backGame, winGame } from '../constants/Utils';
+import { initScore, backGame, winGame } from '../constants/Utils';
 
 import LaunchGame from '../components/LaunchGame'
 import GuessForehead from '../components/GuessForehead'
@@ -43,21 +43,16 @@ export default class ThemeForeheadScreen extends React.Component {
             "title": "Random",
             "values": allValues
         });
+
+        initScore.bind(this)();
     }
 
-    componentWillMount() {
-        getScore(this.key, (score) => {
-            this.setState({
-                score
-            });
-        });
-    }
 
     _initGame = (idTheme) => {
         this.values = dataAPI[idTheme].values.slice(0);
 
         this.setState({
-            timer: 10,
+            timer: 60,
             isPlaying: true
         })
 

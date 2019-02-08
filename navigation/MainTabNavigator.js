@@ -120,8 +120,8 @@ const StacksOverTabs = createStackNavigator({
     Root: {
       screen: TabNav,
       navigationOptions: {
-        header: props => <Header {...props} />,
-    }
+            header: props => <Header {...props} />,
+        }
     },
     Settings: {
         screen: OptionsScreen,

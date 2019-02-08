@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { initScore, backGame, winGame } from '../constants/Utils';
+import { initScore, winGame } from '../constants/Utils';
 
 import Layout from '../constants/Layout'
-import { AsyncStorage } from "react-native"
 import Colors from '../constants/Colors';
 import LaunchGame from '../components/LaunchGame'
 

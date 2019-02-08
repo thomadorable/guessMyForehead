@@ -113,7 +113,9 @@ export default class LaunchGame extends React.Component {
 
         return (
         <View style={Layout.container}>
-            <TouchableOpacity onPress={this._toggleRules} style={styles.rulesContainer} onLayout={this._setMaxHeight.bind(this)}>
+            <TouchableOpacity onPress={() => {
+                this._toggleRules(false);
+            }} style={styles.rulesContainer} onLayout={this._setMaxHeight.bind(this)}>
                 <Animated.View style={[{overflow: 'hidden', opacity: opacity}, setMaxHeight]}>
                     <Text style={styles.title}>{this.props.title} | Règles du jeu</Text>
                     <Text style={styles.rules}>
