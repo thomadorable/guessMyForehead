@@ -115,17 +115,6 @@ export default class TicTacToeScreen extends React.Component {
         var win = this.state.win 
         var emptyCell = this.state.emptyCell 
 
-        if (win == '' && emptyCell == 0) {
-            win = "null"
-
-            this.setState({
-                win
-            })
-
-            this.pts = 0
-            setTimeout(winGame.bind(this), 2000);
-        }
-
         if (win != "null") {
             
             if (cards[0] == joueur && cards[1] == joueur && cards[2] == joueur
@@ -151,6 +140,17 @@ export default class TicTacToeScreen extends React.Component {
                     joueur
                 })
             }
+        }
+
+        if (win == '' && emptyCell == 0) {
+            win = "null"
+
+            this.setState({
+                win
+            })
+
+            this.pts = 0
+            setTimeout(winGame.bind(this), 2000);
         }
     }
 

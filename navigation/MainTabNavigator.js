@@ -97,4 +97,10 @@ export default createStackNavigator({
             header: props => <Header {...props} />,
         }
     },
-});
+    Games: {
+        screen: GamesNav,
+        navigationOptions: {
+            header: props => <Header {...props} />,
+        },
+    },
+}); 
