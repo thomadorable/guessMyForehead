@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Image, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import { AsyncStorage } from "react-native"
 import { ImagePicker } from 'expo';
 
@@ -78,7 +78,7 @@ export default class OptionsScreen extends React.Component {
     render() {
         const imageUri = (this.state.user.image && this.state.user.image.length > 0) ? {uri: this.state.user.image} : require('../assets/images/avatar.png');
         return (
-            <View style={[Layout.container, {justifyContent: 'space-between', paddingTop: 50}]}>
+            <ScrollView style={[Layout.container, {justifyContent: 'space-between', paddingTop: 50}]}>
                 <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                     <View style={{width: 250}}>
                         <Text style={styles.label}>Choisis ton pseudo </Text>
@@ -136,7 +136,7 @@ export default class OptionsScreen extends React.Component {
                 </View>
 
                 <Text style={{fontWeight: 'bold', fontStyle: 'italic', padding: 30, textAlign: 'center'}}> * Les données sont enregistrées automatiquement à chaque modifications.</Text>
-            </View>
+            </ScrollView>
         )
     }
 }
