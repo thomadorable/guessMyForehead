@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Animated, Easing } from 'react-native';
-import { shuffle, backGame, initScore, winGame } from '../constants/Utils';
+import { backGame, initScore, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
 import Colors from '../constants/Colors'
 import { getScore } from '../utils/data'
@@ -9,7 +9,7 @@ import Back from '../components/Back'
 import LaunchGame from '../components/LaunchGame'
 
 
-export default class Z048Stack extends React.Component {
+export default class Z048Screen extends React.Component {
     static navigationOptions = {
         header: null,
     };
@@ -19,7 +19,9 @@ export default class Z048Stack extends React.Component {
 
         this.key = 'Z048';
         this.width = 4;
+        this.pts = 0;
 
+        this.colors = ['#ede4da', '#ece0c6', '#f4b274', '#f7955d', '#fb7959', '#f85c32', '#eecf6b', '#edc843', '#eec52e', '#edc30f', '#ff3a35', '#ef4b54'];
 
         this.state = {
             isPlaying: false
@@ -31,12 +33,14 @@ export default class Z048Stack extends React.Component {
     _initGame = () => {
         var cards = [];
         for (let i = 0, l = (this.width * this.width); i < l; i++) {
-            if (i === 6 || i === 7 || i === 11 || i === 8 || i === 13) {
+            if (i === 6 || i === 11) {
                 cards.push(1);
             } else {
                 cards.push(0);
             }
         }
+
+        this.pts = 0;
 
         this.setState({
             isPlaying: true,
@@ -44,9 +48,8 @@ export default class Z048Stack extends React.Component {
         });
     }
 
-    // TODO : check this is not verry functionnal
     _removeZero = (array) => {
-        for (let i = array.length - 1; i--;){
+        for (let i = array.length; i--;){
             if (array[i] === 0) {
                 array.splice(i, 1);
             }
@@ -54,47 +57,179 @@ export default class Z048Stack extends React.Component {
     }
 
     _mergeNumbers = (array) => {
-        console.log('array', array)
+        let lastValue = 0;
         for (let i = 0, l = array.length; i < l; i++) {
             let value = array[i];
             if (value !== 0) {
-                console.log('value =>', value);
+                if (lastValue === value) {
+                    array[i - 1]++;
+                    array.splice(i, 1);
+                }
+            }
+            lastValue = value;
+        }
+    }
+
+    _fillZerosPush = (array) => {
+        const length = array.length;
+        const missingZeros = this.width - length;
+        if (missingZeros > 0) {
+            for (let i = 0; i < missingZeros; i++) {
+                array.push(0);
             }
         }
     }
 
-    _cleanRows = (cards) => {
-        for (let i = 0, l = this.width; i < l; i++) {
-            let row = cards.splice(0, 4);
-            this._removeZero(row);
-            this._mergeNumbers(row);
-            console.log('row 2 => ', row);
-
-            console.log('-----')
+    _fillZerosUnshift = (array) => {
+        const length = array.length;
+        const missingZeros = this.width - length;
+        if (missingZeros > 0) {
+            for (let i = 0; i < missingZeros; i++) {
+                array.unshift(0);
+            }
         }
     }
 
-    // TODO
-    // OK - tej tous les 0 quand on va à gauche
+    _cleanRows = (cards, callback) => {
+        let newCards = [];
+        for (let i = 0, l = this.width; i < l; i++) {
+            let row = cards.splice(0, this.width);
+            this._removeZero(row);
+            this._mergeNumbers(row);
+            this[callback](row);
 
-    // TODO - fusionner les chiffres identiques vers la gauche
-    // TODO - replacer les 0 à la fin
-    // TODO - faire pareil avec les 4 directions
+            newCards = newCards.concat(row);
+        }
 
-    _addNumber = (direction) => {
+        return newCards;
+    }
+
+    _mergeCols = (rows) => {
+        let cards = [];
+        for (let i = 0, l = this.width; i < l; i++) {
+            for (let y = 0, l = rows.length; y < l; y++) {
+                cards.push(rows[y][i]);
+            }
+        }
+        
+        return cards;
+    }
+
+    _cleanCols = (cards, callback) => {
+        let newCards = [];
+        let rows = [];
+        for (let i = 0, l = this.width; i < l; i++) {
+            let row = cards.filter((number, index) => index % this.width === i);
+            this._removeZero(row);
+            this._mergeNumbers(row);
+            this[callback](row);
+
+            rows.push(row);
+        }
+
+        newCards = this._mergeCols(rows);
+
+        return newCards;
+    }
+
+    _addNumber = (array) => {
+        var borderIndex = [];
+        for (let i = 0; i < array.length; i++) {
+            if (i < this.width && borderIndex.indexOf(i) === -1) {
+                borderIndex.push(i); // TOP
+            }
+
+            if (i > (array.length - this.width)) {
+                borderIndex.push(array.length - i - 1); // BOTTOM
+            }
+
+            if (i % this.width === 0 && borderIndex.indexOf(i) === -1) {
+                borderIndex.push(i); // LEFT
+            }
+
+
+            if (i % this.width === (this.width - 1) && borderIndex.indexOf(i) === -1) {
+                borderIndex.push(i); // RIGHT
+            }
+        }
+
+        borderIndex = borderIndex.filter((value) => array[value] === 0)
+
+        const randomIndex = Math.floor(Math.random() * borderIndex.length);
+        const value = (Math.random() > 0.35) ? 1 : 2;
+
+        array[borderIndex[randomIndex]] = value;
+
+        return array;
+    }
+
+    _countPts = (cards) => {
+        let nbEmpty = 0;
+        let nbPts = 0;
+        for (let i = 0, l = cards.length; i < l; i++) {
+            const card = cards[i];
+            if (card === 0) {
+                nbEmpty++;
+            } else {
+                nbPts += Math.pow(2, card);
+            }
+        }
+
+        this.pts = nbPts;
+        if (nbEmpty === 0) {
+            winGame.bind(this)();
+        }
+    }
+
+    _movement = (direction) => {
         // Copy array
         let cards = this.state.cards.slice(0);
 
         switch (direction) {
             case 'left':
-                this._cleanRows(cards);
+                cards = this._cleanRows(cards, '_fillZerosPush');
+                break;
 
+            case 'right':
+                cards = this._cleanRows(cards, '_fillZerosUnshift');
+                break;
+
+            case 'top':
+                cards = this._cleanCols(cards, '_fillZerosPush');
                 break;
         
-            default:
+            default: // botom
+                cards = this._cleanCols(cards, '_fillZerosUnshift');
                 break;
         }
+
+        cards = this._addNumber(cards);
+
+        this._countPts(cards);
+
+        this.setState({
+            cards
+        })
     }
+
+    onSwipe(gestureName, gestureState) {
+        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+        this.setState({gestureName: gestureName});
+        switch (gestureName) {
+          case SWIPE_UP:
+            console.log('up')
+            break;
+          case SWIPE_DOWN:
+            console.log('down')
+            break;
+          case SWIPE_LEFT:
+            console.log('left')
+            break;
+          case SWIPE_RIGHT:
+            console.log('right')
+            break;
+        }
+      }
 
     _renderGame = () => {
         return (
@@ -103,12 +238,13 @@ export default class Z048Stack extends React.Component {
                     backGame.bind(this)();
                 }} />
                 
-                <View style={{width: 4 * 24, flexDirection: 'row', flexWrap: 'wrap'}}>
+                <View style={{width: 4 * 54, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {
                     this.state.cards && this.state.cards.map((value, index) => {
-                        const display = value > 0 ? Math.pow(2, value) : 0;
+                        const display = value > 0 ? Math.pow(2, value) : null;
+                        const color = value > 0 ? this.colors[value] : 'lightgrey';
                         return(
-                            <View key={index} style={{width: 20, height: 20, backgroundColor: 'lightgrey', margin: 2}}>
+                            <View key={index} style={{width: 50, height: 50, backgroundColor: color, margin: 2, alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
                                 <Text style={{textAlign: 'center'}}>{display}</Text>
                             </View>
                         )
@@ -116,33 +252,53 @@ export default class Z048Stack extends React.Component {
                 }
                 </View>
 
-                <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15}}>
+                <Text>{this.pts} points</Text>
+
+                {/* <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15}}>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this._addNumber('top')
+                        this._movement('top')
                     }}>
                         <Text style={styles.btnText}>^</Text>
                     </TouchableOpacity>
 
                     <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity style={[styles.btn, {marginRight: 30}]} onPress={() => {
-                            this._addNumber('left')
+                            this._movement('left')
                         }}>
                             <Text style={[styles.btnText, {transform: [{ rotate: '-90deg'}]}]}>^</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.btn} onPress={() => {
-                            this._addNumber('right')
+                            this._movement('right')
                         }}>
                                 <Text style={[styles.btnText, {transform: [{ rotate: '90deg'}]}]}>^</Text>
                         </TouchableOpacity>
                     </View>
                     
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this._addNumber('bottom')
+                        this._movement('bottom')
                     }}>
                             <Text style={[styles.btnText, {transform: [{ rotate: '180deg'}]}]}>^</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
+
+                <GestureRecognizer
+                    onSwipe={(direction, state) => this.onSwipe(direction, state)}
+                    // onSwipeUp={(state) => this.onSwipeUp(state)}
+                    // onSwipeDown={(state) => this.onSwipeDown(state)}
+                    // onSwipeLeft={(state) => this.onSwipeLeft(state)}
+                    // onSwipeRight={(state) => this.onSwipeRight(state)}
+                    config={{
+                        velocityThreshold: 0.3,
+                        directionalOffsetThreshold: 80
+                    }}
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'red'
+                    }}
+                    >
+                    <Text>hello</Text>
+                </GestureRecognizer>
             </View>
         )
     }
