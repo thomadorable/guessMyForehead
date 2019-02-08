@@ -57,7 +57,7 @@ export default class CustomHeader extends React.Component {
             >
                 <Text style={styles.title}>Guess My Game</Text>
                 {
-                    this._showOptions()
+                    //this._showOptions()
                 }
                 
             </LinearGradient>
