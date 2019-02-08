@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { initScore, backGame, winGame } from '../constants/Utils';
+
 import Layout from '../constants/Layout'
 import { AsyncStorage } from "react-native"
 import Colors from '../constants/Colors';
+import LaunchGame from '../components/LaunchGame'
 
 const centerX = Math.round(Layout.window.width / 2);
 
@@ -13,6 +16,7 @@ const centerX = Math.round(Layout.window.width / 2);
 // - collision avec les bonus qui font rapetissir ?
 // - ne pas pouvoir faire demi-tour
 // - ne pas pouvoir sortir de l'écran
+// - show best score 
 
 
 export default class SnakeScreen extends React.Component {
@@ -22,15 +26,31 @@ export default class SnakeScreen extends React.Component {
     
     constructor(props) {
         super(props);
-        this.best = 0;
+
+        this.key = 'snake2';
+
+        this.state = {
+            isPlaying: false
+        }
+
+        initScore.bind(this)();
     }
 
-    componentWillMount() {
-        this._init();
-        this._getBestScore();
-    }
+    _initGame = () => {
+        this.setState({
+            isPlaying: true
+        });
 
-    componentDidMount() {
+        this.blocs = [{
+            top: 80,
+            left: centerX
+        }];
+
+        this.direction = 'BOTTOM';
+        this.deplacements = [];
+        this.speed = 10;
+        this.pts = 0;
+
         this.interval = setInterval(() => {
             const isOutBottom = this.blocs[0].top > this.height - 11;
             const isOutTop = this.blocs[0].top < 0;
@@ -38,7 +58,7 @@ export default class SnakeScreen extends React.Component {
             const isOutLeft = this.blocs[0].left < -5;
 
             if (isOutBottom || isOutTop || isOutLeft || isOutRight) {
-                this._loose();
+                this._endGame();
             } else {
                 this.deplacements.unshift(this.direction)
                 this.deplacements = this.deplacements.slice(0, this.blocs.length);
@@ -69,10 +89,13 @@ export default class SnakeScreen extends React.Component {
                     }
 
                     if (i > 0 && bloc.top === this.blocs[0].top && bloc.left === this.blocs[0].left) {
-                        this._loose();
+                        this._endGame();
                     }
 
-                    this.refs['snake' + i].setNativeProps({ style: bloc });
+                    if (this.refs['snake' + i]) {
+                        this.refs['snake' + i].setNativeProps({ style: bloc });
+                    }
+
                 }
             }
         }, 50);
@@ -101,58 +124,22 @@ export default class SnakeScreen extends React.Component {
             }
 
             this.blocs.push(newBloc);
-            this.forceUpdate();
             this.pts ++;
 
-            if (this.pts > this.best) {
-                this.best = this.pts;
-            }
+            this.forceUpdate();
         }, 200)
     }
 
-    _loose = () => {
-        this._save();
-        this._init();
+    _endGame = () => {
+        clearInterval(this.interval);
+        clearInterval(this.interval2);
+        winGame.bind(this)();
+        this.setState({
+            isPlaying: false
+        });
     }
 
-    _init = () => {
-        this.blocs = [{
-            top: 80,
-            left: centerX
-        }];
-
-        this.direction = 'BOTTOM';
-        this.deplacements = [];
-        this.speed = 10;
-        this.pts = 0;
-    }
-
-    _save = async () => {
-        try {
-            await AsyncStorage.setItem('@GuessMyForehead:snake', JSON.stringify({
-                best: this.best,
-                last: this.pts
-            }));
-        } catch (error) {
-            // Error saving data
-        }
-    }
-
-    _getBestScore = async () => {
-        try {
-          const value = await AsyncStorage.getItem('@GuessMyForehead:snake');
-            if (value) {
-                var json = JSON.parse(value);
-                if (json && json.best) {
-                    this.best = json.best;
-                }
-            }
-        } catch (error) {
-           console.log('error get')
-        }
-    }
-
-    render() {
+    _renderGame = () => {
         return (
             <View style={styles.container}>
                 <View 
@@ -175,7 +162,7 @@ export default class SnakeScreen extends React.Component {
                 <View>
                     <View style={{position: 'absolute', left: 10, top: 10}}>
                         <Text style={{fontWeight: 'bold', fontSize: 14, marginBottom: 5}}>{this.pts} points</Text>
-                        <Text style={{fontWeight: 'bold', fontSize: 14}}>best : {this.best}</Text>
+                        {/* <Text style={{fontWeight: 'bold', fontSize: 14}}>best : {this.best}</Text> */}
                     </View>
 
                     <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15}}>
@@ -208,6 +195,17 @@ export default class SnakeScreen extends React.Component {
                 </View>
             </View>
         );
+    }
+
+    render() {
+        return (this.state.isPlaying) ? (
+            this._renderGame()
+        ) : <LaunchGame
+                title="Snake"
+                action={this._initGame}
+                score={this.state.score}
+                rules="Tu dois trouver le mot caché en devinant les lettres une par une. Attention, tes tentatives sont limitées ! Bonne chance !"
+            />
     }
 }
 

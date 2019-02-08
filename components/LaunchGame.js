@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image, AsyncStorage, Animated, Easing } from 'react-native';
+
 import Layout from '../constants/Layout'
 import Score from './Score'
 import { LinearGradient } from 'expo';
@@ -16,7 +17,7 @@ export default class LaunchGame extends React.Component {
         this.spinValue = new Animated.Value(1);
     }
 
-    _toggleRules = () => {
+    _toggleRules = (skipAnim) => {
         var maxHeight = (this.state.isDisplay) ? this.minHeight : this.maxHeight;
 
         var from = (this.state.isDisplay) ? 0 : 1;
@@ -28,14 +29,14 @@ export default class LaunchGame extends React.Component {
 
         Animated.timing(this.animHeight, {
             toValue: maxHeight,
-            duration: 300,
+            duration: skipAnim ? 0 : 300,
             easing: Easing.easeIn
         }).start(); 
 
         this.spinValue = new Animated.Value(from);
         Animated.timing(this.spinValue, {
             toValue: to,
-            duration: 200,
+            duration: skipAnim ? 0 : 200,
             easing: Easing.easeIn
         }).start();
     }
@@ -50,7 +51,7 @@ export default class LaunchGame extends React.Component {
             }, () => {
                 const checkScores = this.props.score && this.props.score.games.ended && this.props.score.games.ended > 0;
                 if (this.props.score && !checkScores) {
-                    this._toggleRules();
+                    this._toggleRules(true);
                 }
             });
 
@@ -78,6 +79,27 @@ export default class LaunchGame extends React.Component {
                 </View>
             )
         }
+    }
+
+    _isCustomButton = () => {
+        if (this.props.customPlayButton) {
+            return this.props.customPlayButton();
+        }
+
+        return (
+            <View style={{justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 30}}>
+            <TouchableOpacity onPress={this.props.action}>
+                <LinearGradient
+                    colors={[Colors.blue, Colors.green]}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    style={styles.btn}
+                >
+                    <Text style={{fontSize: 18, color: 'white', letterSpacing: 2}}>Jouer</Text>
+                </LinearGradient>
+            </TouchableOpacity>
+        </View>
+        )
     }
 
     render() {
@@ -139,18 +161,7 @@ export default class LaunchGame extends React.Component {
 
             {this._showLastGame()}
 
-            <View style={{justifyContent: 'flex-end', alignItems: 'center', flex: 1, paddingBottom: 30}}>
-                <TouchableOpacity onPress={this.props.action}>
-                    <LinearGradient
-                        colors={[Colors.blue, Colors.green]}
-                        start={[0, 0]}
-                        end={[1, 0]}
-                        style={{height: 44, paddingHorizontal: 50, borderRadius: 22, justifyContent: 'center', alignItems: 'center'}}
-                    >
-                        <Text style={{fontSize: 18, color: 'white', letterSpacing: 2}}>Jouer</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
+            {this._isCustomButton()}
         </View>
         )
     }
@@ -181,5 +192,12 @@ const styles = StyleSheet.create({
         color: Colors.black,
         fontSize: 14,
         lineHeight: 22,
+    },
+    btn: {
+        height: 44, 
+        paddingHorizontal: 50, 
+        borderRadius: 22, 
+        justifyContent: 'center', 
+        alignItems: 'center'
     }
 });

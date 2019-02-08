@@ -8,7 +8,6 @@ import { getScore } from '../utils/data'
 import Back from '../components/Back'
 import LaunchGame from '../components/LaunchGame'
 
-const KEY = 'hangman';
 
 // 10 letters max per row - 2px margin
 const widthLetter = Math.floor(Layout.window.width / 10) - 2;
@@ -21,6 +20,8 @@ export default class HangmanScreen extends React.Component {
     constructor(props) {
         super(props);
         
+        this.key = 'hangman';
+
         this.letters = 'azertyuiopqsdfghjklmwxcvbn'.toUpperCase().split('');
 
         this.images = [
@@ -41,7 +42,7 @@ export default class HangmanScreen extends React.Component {
     }
 
     componentWillMount() {
-        getScore(KEY, (score) => {
+        getScore(this.key, (score) => {
             this.setState({
                 score,
             });
@@ -118,9 +119,7 @@ export default class HangmanScreen extends React.Component {
                 tryLetters: [...this.state.tryLetters, letter]
             },() => {
                 if (this.state.tryLetters.length >= (this.images.length - 1)) {
-                    console.log('perdu')
-                    console.log(this.pts, this.word)
-                    winGame.bind(this)(KEY);
+                    winGame.bind(this)();
                 }
             });
         }
@@ -136,7 +135,7 @@ export default class HangmanScreen extends React.Component {
             }
 
             if (nbWin >= l) {
-                winGame.bind(this)(KEY);
+                winGame.bind(this)();
             }
         }
     }
@@ -146,7 +145,8 @@ export default class HangmanScreen extends React.Component {
         return (
             <View style={Layout.container}>
                 <Back navigation={this.props.navigation} action={() => {
-                    backGame.bind(this)(KEY);
+                    this.pts = 0;
+                    backGame.bind(this)();
                 }} />
 
                 <View style={styles.word}>
@@ -183,7 +183,7 @@ export default class HangmanScreen extends React.Component {
     render() {
         const lastGame = this.word ? [this.pts, this.word] : null;
 
-        console.log(this.word, lastGame);
+        console.log(this.word);
 
         return (this.state.isPlaying) ? (
             this._renderGame()

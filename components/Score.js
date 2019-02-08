@@ -19,10 +19,11 @@ export default class Score extends React.Component {
     }
 
     render() {
+        const value = this.props.value ? this.props.value : 0;
         return (
             <View>
                 <Text style={styles.ptsLabel}>{this.props.label}</Text>
-                <Text style={styles.pts}>{this.props.value}</Text>
+                <Text style={styles.pts}>{value}</Text>
                 {this._showUnit()}
             </View>
         )

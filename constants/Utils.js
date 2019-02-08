@@ -12,18 +12,18 @@ export function shuffle (a) {
     return a;
 }
 
-export function backGame (KEY) {
+export function backGame () {
     let score = this.state.score;
         score.games.canceled++;
 
-    setScore(KEY, score);
+    setScore(this.key, score);
     this.setState({
         score: score,
         isPlaying: false
     });
 }
 
-export function winGame (KEY) {
+export function winGame () {
     let score = this.state.score;
     score.games.ended++;
 
@@ -34,9 +34,17 @@ export function winGame (KEY) {
         score.scores.best = this.pts;
     }
 
-    setScore(KEY, score);
+    setScore(this.key, score);
     this.setState({
         score,
         isPlaying: false,
+    });
+}
+
+export function initScore () {
+    getScore(this.key, (score) => {
+        this.setState({
+            score,
+        });
     });
 }

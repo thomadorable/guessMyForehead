@@ -18,7 +18,7 @@ export default class CustomHeader extends React.Component {
                 }
             }
         } catch (error) {
-           console.log('error get')
+        //    console.log('error get')
         }
     }
 
@@ -36,7 +36,7 @@ export default class CustomHeader extends React.Component {
 
     _showOptions = () => {
         if (!this.props.hideOptions) {
-            const imageUri = (this.state.image.length > 0) ? {uri: this.state.image} : require('../assets/images/avatar.png');
+            const imageUri = (this.state.image && this.state.image.length > 0) ? {uri: this.state.image} : require('../assets/images/avatar.png');
             return (
                 <TouchableOpacity style={styles.options} onPress={() => {
                     this.props.navigation.navigate("Settings")

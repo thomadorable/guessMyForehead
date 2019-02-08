@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, Image, Button, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { AsyncStorage } from "react-native"
 import { ImagePicker } from 'expo';
 
@@ -37,7 +37,7 @@ export default class OptionsScreen extends React.Component {
                 })
             }
         } catch (error) {
-           console.log('error get')
+        //    console.log('error get')
         }
     }
 
@@ -65,6 +65,7 @@ export default class OptionsScreen extends React.Component {
 
 
     _checkCameraPermissions = async () => {
+        Keyboard.dismiss();
         const { Location, Permissions } = Expo;
         const { status, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status === 'granted') {
@@ -88,7 +89,7 @@ export default class OptionsScreen extends React.Component {
                             style={Layout.input}
                             placeholder="Pseudo"
                             textContentType="username"
-                            // autoCapitalize="none"
+                            returnKeyType="send"
                             blurOnSubmit={false}
                             onChangeText={(pseudo) => {
                                 let user = this.state.user;
@@ -98,6 +99,12 @@ export default class OptionsScreen extends React.Component {
                                 })
                             }}
                             value={this.state.user.pseudo}
+                            onEndEditing={() => {
+                                Keyboard.dismiss()
+                            }}
+                            onSubmitEditing={() => {
+                                Keyboard.dismiss()
+                            }}
                         />
 
 
@@ -114,6 +121,14 @@ export default class OptionsScreen extends React.Component {
                         <Button onPress={() => {
                             this._updateImage('');
                         }} title="Supprimer"/>
+
+
+                        <Button onPress={() => {
+                            AsyncStorage.clear();
+                            this.setState({
+                                user: {}
+                            })
+                        }} title="Supprimer toutes mes données"/>
 
                     </View>
                 </View>

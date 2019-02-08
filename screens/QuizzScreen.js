@@ -8,7 +8,6 @@ import { getScore, setScore } from '../utils/data'
 
 import LaunchGame from '../components/LaunchGame'
 
-const KEY = 'quizz';
 
 export default class QuizzScreen extends React.Component {
     static navigationOptions = {
@@ -18,12 +17,13 @@ export default class QuizzScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.key = 'quizz';
 
         this.nbQuestions = 10;
     }
 
     componentWillMount() {
-        getScore(KEY, (score) => {
+        getScore(this.key, (score) => {
             this.setState({
                 score
             });
@@ -54,7 +54,7 @@ export default class QuizzScreen extends React.Component {
                 question
             });
         } else {
-            winGame.bind(this)(KEY);
+            winGame.bind(this)();
         }
     }
 
@@ -77,7 +77,7 @@ export default class QuizzScreen extends React.Component {
         return (this.state.isPlaying) ? (
             <View style={Layout.container}>
                 <Back navigation={this.props.navigation} action={() => {
-                    backGame.bind(this)(KEY);
+                    backGame.bind(this)();
                 }} />
                 <View style={styles.guessContainer}>
                     <Text style={styles.guess}>

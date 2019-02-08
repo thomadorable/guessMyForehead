@@ -3,23 +3,22 @@ import { Platform, Text } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/ThemeForeheadScreen';
-import GuessForeheadScreen from '../screens/GuessForeheadScreen';
+import ThemeForeheadScreen from '../screens/ThemeForeheadScreen';
 import HangmanScreen from '../screens/HangmanScreen';
 import SnakeScreen from '../screens/SnakeScreen';
 import MemoryScreen from '../screens/MemoryScreen';
 import QuizzScreen from '../screens/QuizzScreen';
 import OptionsScreen from '../screens/OptionsScreen';
+import Z048Screen from '../screens/Z048Screen';
 
 import Header from '../components/Header'
 import Colors from '../constants/Colors';
 
-const HomeStack = createStackNavigator({
-    Home: HomeScreen,
-    GuessForehead: GuessForeheadScreen
+const ForeheadStack = createStackNavigator({
+    Home: ThemeForeheadScreen
 });
 
-HomeStack.navigationOptions = {
+ForeheadStack.navigationOptions = {
     tabBarLabel: 'Guess',
     tabBarIcon: ({ focused }) => (
         <TabBarIcon
@@ -87,12 +86,29 @@ QuizzStack.navigationOptions = {
     )
 };
 
+const Z048Stack = createStackNavigator({
+    Z049: {
+        screen: Z048Screen,
+    }
+});
+
+Z048Stack.navigationOptions = {
+    tabBarLabel: '2048',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-infinite' : 'md-infinite'}
+        />
+    )
+};
+
 var TabNav = createBottomTabNavigator({
+    Z048Stack,
+    SnakeStack,
+    ForeheadStack,
     HangmanStack,
     MemoryStack,
     QuizzStack,
-    HomeStack,
-    SnakeStack,
 }, {
     tabBarOptions: {
         activeTintColor: Colors.tabIconSelected

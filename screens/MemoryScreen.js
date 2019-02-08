@@ -7,7 +7,6 @@ import { getScore } from '../utils/data'
 import Back from '../components/Back'
 import LaunchGame from '../components/LaunchGame'
 
-const KEY = 'memory';
 
 const cardWidth = 80;
 const nbColumns = 4;
@@ -20,6 +19,8 @@ export default class MemoryScreen extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.key = 'memory';
 
         this.spinValue = new Animated.Value(0);
         this.colorValue = new Animated.Value(0);
@@ -34,7 +35,7 @@ export default class MemoryScreen extends React.Component {
     }
 
     componentWillMount() {
-        getScore(KEY, (score) => {
+        getScore(this.key, (score) => {
             this.setState({
                 score
             });
@@ -81,7 +82,7 @@ export default class MemoryScreen extends React.Component {
                 this.nbToWin--;
 
                 if (this.nbToWin <= 0) {
-                    winGame.bind(this)(KEY);
+                    winGame.bind(this)();
                     return;
                 }
                 this.currents = [];
@@ -135,7 +136,7 @@ export default class MemoryScreen extends React.Component {
         return (
             <View style={[Layout.container, { alignItems: 'center' }]}>
                 <Back navigation={this.props.navigation} action={() => {
-                    backGame.bind(this)(KEY);
+                    backGame.bind(this)();
                 }} />
                 <View style={styles.cards}>
                     {

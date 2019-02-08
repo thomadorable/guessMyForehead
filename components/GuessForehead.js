@@ -5,76 +5,26 @@ import Layout from '../constants/Layout'
 import Back from '../components/Back'
 import Colors from '../constants/Colors';
 
-export default class GuessForeheadScreen extends React.Component {
-    static navigationOptions = {
-        header: null,
-    };
-
+export default class GuessForehead extends React.Component {
     constructor(props) {
         super(props);
-        
-        // Use slice to duplicate array and avoid updating default datas
-        this.values = this.props.navigation.state.params.data.values.slice(0);
-
-        this.state = {
-            value: 'vide',
-            pts: 0,
-            timer: 60
-        };
-    }
-
-    componentWillMount() {
-        this.selectValue();
-
-        this.interval = setInterval(() => {
-            if (this.state.timer <= 1) {
-                this.endGame()
-            } else {
-                this.setState({
-                    timer: this.state.timer - 1
-                });
-            }
-        }, 1000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
-    selectValue = () => {
-        if (this.values.length > 0) {
-            const value = this.values.splice(Math.floor(Math.random() * this.values.length), 1);
-            this.setState({
-                value
-            })
-        } else {
-            this.endGame()
-        }
-    }
-
-    endGame = () => {
-        clearInterval(this.interval);
-        alert('Terminé  ! ' + this.state.pts + ' points ');
-        this.props.navigation.pop();
     }
 
     render() {
         return (
             <View style={Layout.container}>
-                <Back navigation={this.props.navigation} />
+                <Back navigation={this.props.navigation} action={this.props.backAction} />
 
                 <View style={styles.guessContainer}>
-                    <Text style={styles.guess}>{this.state.value}</Text>
-                        <Text style={styles.timer}>{this.state.timer}s | {this.state.pts}</Text>
+                    <Text style={styles.guess}>{this.props.value}</Text>
+                        <Text style={styles.timer}>{this.props.timer}s | {this.props.pts}</Text>
                 </View>
 
                 <View style={styles.btnContainer}>
                     <TouchableOpacity
                         style={[styles.btn, {backgroundColor: Colors.true}]}
                         onPress={() => {
-                            this.setState({
-                                pts: this.state.pts + 1
-                            }, this.selectValue)
+                            this.props.win();
                         }}
                         >
                         <Text style={styles.textBtn}>Gagné</Text>
@@ -83,11 +33,11 @@ export default class GuessForeheadScreen extends React.Component {
                     <TouchableOpacity
                         style={styles.btn}
                         onPress={() => {
-                            this.selectValue();
+                            this.props.next();
                         }}
                         >
                         <Text style={styles.textBtn}>Perdu</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> 
                 </View>
             </View>
         );
