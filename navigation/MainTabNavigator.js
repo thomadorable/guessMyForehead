@@ -10,6 +10,7 @@ import MemoryScreen from '../screens/MemoryScreen';
 import QuizzScreen from '../screens/QuizzScreen';
 import OptionsScreen from '../screens/OptionsScreen';
 import Z048Screen from '../screens/Z048Screen';
+import TicTacToeScreen from '../screens/TicTacToeScreen';
 
 import Header from '../components/Header'
 import Colors from '../constants/Colors';
@@ -87,7 +88,7 @@ QuizzStack.navigationOptions = {
 };
 
 const Z048Stack = createStackNavigator({
-    Z049: {
+    Z048: {
         screen: Z048Screen,
     }
 });
@@ -102,7 +103,24 @@ Z048Stack.navigationOptions = {
     )
 };
 
+const TicTacToeStack = createStackNavigator({
+    Z048: {
+        screen: TicTacToeScreen,
+    }
+});
+
+TicTacToeStack.navigationOptions = {
+    tabBarLabel: 'TicTacToe',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
+        />
+    )
+};
+
 var TabNav = createBottomTabNavigator({
+    TicTacToeStack,
     Z048Stack,
     SnakeStack,
     ForeheadStack,
