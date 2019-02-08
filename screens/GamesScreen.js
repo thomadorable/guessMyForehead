@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Easing } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated, Easing, ImageBackground } from 'react-native';
 import { shuffle, backGame, initScore, winGame } from '../constants/Utils';
 import Layout from '../constants/Layout'
 import Colors from '../constants/Colors'
@@ -19,15 +19,58 @@ export default class GamesScreen extends React.Component {
 
         this.key = 'games';
 
+        this.images = [
+            require('../assets/images/games/guess.jpeg'),
+            require('../assets/images/games/pendu.jpeg'),
+            require('../assets/images/games/snake.jpeg'),
+            require('../assets/images/games/memory.jpeg'),
+            require('../assets/images/games/quizz.jpeg'),
+            require('../assets/images/games/2048.jpeg'),
+            require('../assets/images/games/tictactoe.jpeg')
+        ];
+
+        this.state = {
+            games: [
+                'Guess',
+                'Pendu',
+                'Snake',
+                'Memory',
+                'Quizz',
+                '2048',
+                'TicTacToe'
+            ] 
+        }
+
     }
 
 
+    _customButton = () => {
+        return (
+            <View style={{padding: 30}}>
+                {
+                    this.state.games.map(
+                        (value, index) => {
+                            return <TouchableOpacity
+                                key={index}
+                                // onPress={() => {
+                                //     this._initGame(index);
+                                // }}
+                            >
+                                <ImageBackground 
+                                    imageStyle={{ borderRadius: 5, opacity: 0.7 }}
+                                    style={styles.theme} 
+                                    source={this.images[index]}
+                                >
+                                    <Text style={styles.themeText}>{value.title}</Text>
+                                </ImageBackground>
+                            </TouchableOpacity>
+                        }
+                    )
+                }
+            </View>
+        )
+    }
 
-
-
-
-
-    
 
     render = () => {
         return (
@@ -38,15 +81,11 @@ export default class GamesScreen extends React.Component {
                 </View>
 
                 <View>
-                    <Text>Guess</Text>
-                    <Text>Pendu</Text>
-                    <Text>Snake</Text>
-                    <Text>Memory</Text>
-                    <Text>Quizz</Text>
-                    <Text>2048</Text>
-                    <Text>TicTacToe</Text>
+                    {
+                        this._customButton()
+                    }
                 </View>
-                
+
             </View>
 
             
@@ -61,18 +100,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.grey
     },
-    btn: {
-        fontSize: 10,
-        width: 40,
-        height: 40,
-        borderRadius: 40,
-        borderColor: '#999',
-        borderWidth: 1,
+    theme: {
+        backgroundColor: '#292929',
+        justifyContent: 'center',
+        marginBottom: 20,
+        height: 150,
+        borderRadius: 5
     },
-    btnText: {
-        fontSize: 16,
-        lineHeight: 40,
+    themeText: {
         textAlign: 'center',
-        color: '#999'
+        color: 'white',
+        letterSpacing: 5,
+        fontSize: 20,
+        textTransform: 'uppercase'
     }
 });

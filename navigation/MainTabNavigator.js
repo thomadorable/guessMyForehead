@@ -187,6 +187,6 @@ const StacksOverTabs = createStackNavigator({
     //         header: props => <Header {...props} hideOptions={true} />,
     //     },
     // },
-  });
+});
   
   export default StacksOverTabs;
