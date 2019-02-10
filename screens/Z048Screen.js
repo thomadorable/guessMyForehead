@@ -223,13 +223,13 @@ export default class Z048Screen extends React.Component {
                 <Text style={{marginBottom: 30}}>{this.pts} points</Text>
 
                 
-                <View style={{width: 4 * 64, flexDirection: 'row', flexWrap: 'wrap'}}>
+                <View style={{width: 4 * 54, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {
                     this.state.cards && this.state.cards.map((value, index) => {
                         const display = value > 0 ? Math.pow(2, value) : null;
                         const color = value > 0 ? this.colors[value] : 'lightgrey';
                         return(
-                            <View key={index} style={{width: 60, height: 60, backgroundColor: color, margin: 2, alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
+                            <View key={index} style={{width: 50, height: 50, backgroundColor: color, margin: 2, alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
                                 <Text style={{textAlign: 'center'}}>{display}</Text>
                             </View>
                         )
@@ -237,7 +237,7 @@ export default class Z048Screen extends React.Component {
                 }
                 </View>
 
-                <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15, marginTop: 30}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', paddingVertical: 15, marginTop: 15}}>
                     <TouchableOpacity style={styles.btn} onPress={() => {
                         this._movement('top')
                     }}>

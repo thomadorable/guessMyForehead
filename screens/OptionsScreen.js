@@ -78,64 +78,63 @@ export default class OptionsScreen extends React.Component {
     render() {
         const imageUri = (this.state.user.image && this.state.user.image.length > 0) ? {uri: this.state.user.image} : require('../assets/images/avatar.png');
         return (
-            <ScrollView style={[Layout.container, {justifyContent: 'space-between', paddingTop: 50}]}>
-                <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
-                    <View style={{width: 250}}>
-                        <Text style={styles.label}>Choisis ton pseudo </Text>
-                        <TextInput
-                            style={Layout.input}
-                            placeholder="Pseudo"
-                            textContentType="username"
-                            returnKeyType="send"
-                            blurOnSubmit={false}
-                            onChangeText={(pseudo) => {
-                                let user = this.state.user;
-                                user.pseudo = pseudo;
-                                this.setState({
-                                    user: user
-                                })
+            <ScrollView style={{backgroundColor: Colors.grey}} contentContainerStyle={{flex: 1}}>
+                <View style={[Layout.container, {justifyContent: 'space-between', paddingTop: 50}]}>
+                    <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                        <View style={{width: 250}}>
+                            <Text style={styles.label}>Choisis ton pseudo </Text>
+                            <TextInput
+                                style={Layout.input}
+                                placeholder="Pseudo"
+                                textContentType="username"
+                                returnKeyType="send"
+                                blurOnSubmit={false}
+                                onChangeText={(pseudo) => {
+                                    let user = this.state.user;
+                                    user.pseudo = pseudo;
+                                    this.setState({
+                                        user: user
+                                    })
 
-                                this._setUser();
-                            }}
-                            value={this.state.user.pseudo}
-                            onEndEditing={() => {
-                                Keyboard.dismiss()
-                            }}
-                            onSubmitEditing={() => {
-                                Keyboard.dismiss()
-                            }}
-                        />
+                                    this._setUser();
+                                }}
+                                value={this.state.user.pseudo}
+                                onEndEditing={() => {
+                                    Keyboard.dismiss()
+                                }}
+                                onSubmitEditing={() => {
+                                    Keyboard.dismiss()
+                                }}
+                            />
 
+                            <TouchableWithoutFeedback onPress={this._checkCameraPermissions}>
+                                <View>
+                                    <Image source={imageUri} style={{width: 250, height: 250, backgroundColor: 'black'}}/>
 
-                        <TouchableWithoutFeedback onPress={this._checkCameraPermissions}>
-                            <View>
-                                <Image source={imageUri} style={{width: 250, height: 250, backgroundColor: 'black'}}/>
-
-                                <View style={styles.absoluteCenter}>
-                                    <Text style={styles.textUpdate}>Modifier</Text>
+                                    <View style={styles.absoluteCenter}>
+                                        <Text style={styles.textUpdate}>Modifier</Text>
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableWithoutFeedback>
+                            </TouchableWithoutFeedback>
 
-                        <Button onPress={() => {
-                            this._updateImage('');
-                        }} title="Supprimer la photo"/>
+                            <Button onPress={() => {
+                                this._updateImage('');
+                            }} title="Supprimer la photo"/>
 
 
-                        <TouchableOpacity style={{backgroundColor: Colors.false, padding: 20, marginTop: 30, color: 'white', borderRadius: 5}} onPress={() => {
-                            AsyncStorage.clear();
-                            this.setState({
-                                user: {}
-                            });
-                        }} >
-                            <Text style={{color: 'white'}}>Supprimer toutes mes données</Text>
-                        </TouchableOpacity>
-
+                            <TouchableOpacity style={{backgroundColor: Colors.false, padding: 20, marginTop: 30, color: 'white', borderRadius: 5}} onPress={() => {
+                                AsyncStorage.clear();
+                                this.setState({
+                                    user: {}
+                                });
+                            }} >
+                                <Text style={{color: 'white'}}>Supprimer toutes mes données</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
+                    <Text style={{fontWeight: 'bold', fontStyle: 'italic', padding: 30, textAlign: 'center'}}> * Les données sont enregistrées automatiquement à chaque modifications.</Text>
                 </View>
-
-                <Text style={{fontWeight: 'bold', fontStyle: 'italic', padding: 30, textAlign: 'center'}}> * Les données sont enregistrées automatiquement à chaque modifications.</Text>
             </ScrollView>
         )
     }

@@ -50,7 +50,7 @@ export default class CustomHeader extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 60,
+        paddingTop: 50,
         paddingBottom: 15,
         flexDirection: 'column',
     },
